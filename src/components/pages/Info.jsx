@@ -1,10 +1,17 @@
 import React from "react";
 import styled from "styled-components";
+import AddButtonCircle from "../buttons/AddButtonCircle";
+import { TabTitle } from "../utilities/titleFunction";
 
 function Info() {
+  TabTitle("Info - Budget Ease");
+
   return (
     <Container>
-      <Heading>Info</Heading>
+      <Top>
+        <Heading>Info</Heading>
+        <AddButtonCircle add="category" />
+      </Top>
       <Direction>
         Select type of categories based on this information.
       </Direction>
@@ -74,10 +81,16 @@ const Container = styled.div`
   margin-bottom: -60px;
 `;
 
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 60px;
+`;
+
 const Heading = styled.h3`
   font-size: 48px;
   color: #f9f9f9;
-  margin-bottom: 60px;
 `;
 
 const Direction = styled.p`

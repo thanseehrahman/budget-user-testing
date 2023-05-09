@@ -8,16 +8,28 @@ import {
   selectIncomeCategories,
 } from "../../redux/features/categories/categorySlice";
 import { useDispatch, useSelector } from "react-redux";
-import AddCategoryFromTransactionButton from "../buttons/AddCategoryFromTransactionButton";
+import {
+  deactivateTransactionForm,
+  selectTransactionCache,
+  setTransactionCache,
+} from "../../redux/features/transactions/transactionSlice";
+import AddButtonForm from "../buttons/AddButtonForm";
+import CloseButton from "../buttons/CloseButton";
 
 function AddTransactionForm() {
+  const transactionCache = useSelector(selectTransactionCache);
+
   const [typeDropdown, setTypeDropdown] = useState(false);
   const [categoryDropdown, setCategoryDropdown] = useState(false);
-  const [title, setTitle] = useState("");
-  const [amount, setAmount] = useState("");
-  const [type, setType] = useState("expense");
-  const [categoryID, setCategoryID] = useState("");
-  const [categoryName, setCategoryName] = useState("");
+  const [title, setTitle] = useState(transactionCache.title);
+  const [amount, setAmount] = useState(transactionCache.amount);
+  const [type, setType] = useState(
+    transactionCache.type === "" ? "expense" : transactionCache.type
+  );
+  const [categoryID, setCategoryID] = useState(transactionCache.categoryID);
+  const [categoryName, setCategoryName] = useState(
+    transactionCache.categoryName
+  );
 
   const incomeCategories = useSelector(selectIncomeCategories);
   const expenseCategories = useSelector(selectExpenseCategories);
@@ -26,8 +38,16 @@ function AddTransactionForm() {
   const typeValues = ["expense", "income"];
 
   useEffect(() => {
-    setCategoryName("");
-  }, [type]);
+    dispatch(
+      setTransactionCache({
+        title: title,
+        amount: amount,
+        type: type,
+        categoryID: categoryID,
+        categoryName: categoryName,
+      })
+    );
+  }, [title, amount, type, categoryID, categoryName, dispatch]);
 
   const addTransaction = async (e) => {
     e.preventDefault();
@@ -90,6 +110,7 @@ function AddTransactionForm() {
                       onClick={() => {
                         setType(value);
                         setTypeDropdown(!typeDropdown);
+                        setCategoryName("");
                       }}
                     >
                       {value}
@@ -110,7 +131,12 @@ function AddTransactionForm() {
               <Options style={categoryDropdown ? { display: "block" } : null}>
                 {type === "income" ? (
                   incomeCategories.length === 0 ? (
-                    <Option onClick={() => dispatch(activateCategoryForm())}>
+                    <Option
+                      onClick={() => {
+                        dispatch(activateCategoryForm());
+                        dispatch(deactivateTransactionForm());
+                      }}
+                    >
                       <Value>Add Category+</Value>
                     </Option>
                   ) : (
@@ -138,7 +164,12 @@ function AddTransactionForm() {
                     ))
                   )
                 ) : expenseCategories.length === 0 ? (
-                  <Option onClick={() => dispatch(activateCategoryForm())}>
+                  <Option
+                    onClick={() => {
+                      dispatch(activateCategoryForm());
+                      dispatch(deactivateTransactionForm());
+                    }}
+                  >
                     <Value>Add Category+</Value>
                   </Option>
                 ) : (
@@ -163,8 +194,11 @@ function AddTransactionForm() {
             </Select>
           </Category>
         </SelectArea>
-        <AddCategoryFromTransactionButton />
-        <Submit type="submit">Add transaction</Submit>
+        <Buttons>
+          <CloseButton />
+          <AddButtonForm add="category" />
+        </Buttons>
+        <Submit type="submit">Add Transaction</Submit>
       </Form>
     </Container>
   );
@@ -234,8 +268,6 @@ const Select = styled.div`
   background: #1a1a1a;
   border: 2px solid #2b2b2b;
   border-radius: 8px;
-  font-size: 20px;
-  font-weight: 500;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -281,6 +313,13 @@ const Border = styled.div`
 
 const Category = styled(Type)`
   margin-right: 0;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
 `;
 
 const Submit = styled.button`

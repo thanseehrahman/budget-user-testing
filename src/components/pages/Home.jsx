@@ -10,7 +10,6 @@ import {
   selectTransactionForm,
   setTransactions,
 } from "../../redux/features/transactions/transactionSlice";
-import Navbar from "../objects/Navbar";
 import AddTransaction from "./AddTransaction";
 import {
   selectCategoryForm,
@@ -19,12 +18,15 @@ import {
 import AddCategory from "../pages/AddCategory";
 import EditTransaction from "./EditTransaction";
 import DeleteTransaction from "./DeleteTransaction";
+import { selectNavbar } from "../../redux/features/nav/navbarSlice";
+import Navbar from "../objects/Navbar";
 
 function Home() {
   const transactionForm = useSelector(selectTransactionForm);
   const categoryForm = useSelector(selectCategoryForm);
   const editTransactionForm = useSelector(selectEditTransactionForm);
   const deleteTransactionBox = useSelector(selectDeleteTransactionBox);
+  const navbar = useSelector(selectNavbar);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -99,12 +101,12 @@ function Home() {
   return (
     <Container>
       {transactionForm ? <AddTransaction /> : null}
-      {categoryForm ? <AddCategory /> : null}
       {editTransactionForm ? <EditTransaction /> : null}
       {deleteTransactionBox ? <DeleteTransaction /> : null}
-      <Navbar />
-      <Background>
-        <Outlet />
+      {categoryForm ? <AddCategory /> : null}
+      {navbar ? <Navbar /> : null}
+      <Background navbar={navbar}>
+          <Outlet />
       </Background>
     </Container>
   );
@@ -116,12 +118,13 @@ const Container = styled.div`
 
 const Background = styled.div`
   height: 100vh;
-  width: calc(100% - 270px);
+  width: ${(props) => (props.navbar ? "calc(100% - 270px)" : "100%")};
   overflow-x: hidden;
   position: relative;
-  left: 270px;
+  left: ${(props) => (props.navbar ? "270px" : "0")};
   padding: 90px 60px 60px;
   background: #191919;
+  transition: all 0.6 ease-in-out
 `;
 
 export default Home;

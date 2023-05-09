@@ -5,15 +5,24 @@ const initialState = {
   transactions: [],
   income: [],
   expenses: [],
+  transactionCache: {
+    title: "",
+    amount: "",
+    type: "",
+    categoryID: "",
+    categoryName: "",
+  },
   editTransactionForm: false,
-  editTransaction: {
+  editTransactionCache: {
     id: "",
     title: "",
     amount: "",
     type: "",
+    categoryID: "",
+    categoryName: "",
   },
   deleteTransactionBox: false,
-  deleteTransaction: "",
+  deleteTransactionID: "",
 };
 
 const transactionSlice = createSlice({
@@ -31,17 +40,26 @@ const transactionSlice = createSlice({
       state.income = action.payload.income;
       state.expenses = action.payload.expenses;
     },
+    setTransactionCache: (state, action) => {
+      state.transactionCache.title = action.payload.title;
+      state.transactionCache.amount = action.payload.amount;
+      state.transactionCache.type = action.payload.type;
+      state.transactionCache.categoryID = action.payload.categoryID;
+      state.transactionCache.categoryName = action.payload.categoryName;
+    },
     activateEditTransactionForm: (state) => {
       state.editTransactionForm = true;
     },
     deactivateEditTransactionForm: (state) => {
       state.editTransactionForm = false;
     },
-    setEditTransaction: (state, action) => {
-      state.editTransaction.id = action.payload.id;
-      state.editTransaction.title = action.payload.title;
-      state.editTransaction.amount = action.payload.amount;
-      state.editTransaction.type = action.payload.type;
+    setEditTransactionCache: (state, action) => {
+      state.editTransactionCache.id = action.payload.id;
+      state.editTransactionCache.title = action.payload.title;
+      state.editTransactionCache.amount = action.payload.amount;
+      state.editTransactionCache.type = action.payload.type;
+      state.editTransactionCache.categoryID = action.payload.categoryID;
+      state.editTransactionCache.categoryName = action.payload.categoryName;
     },
     activateDeleteTransactionBox: (state) => {
       state.deleteTransactionBox = true;
@@ -59,9 +77,10 @@ export const {
   activateTransactionForm,
   deactivateTransactionForm,
   setTransactions,
+  setTransactionCache,
   activateEditTransactionForm,
   deactivateEditTransactionForm,
-  setEditTransaction,
+  setEditTransactionCache,
   activateDeleteTransactionBox,
   deactivateDeleteTransactionBox,
   setDeleteTransaction,
@@ -72,10 +91,12 @@ export const selectTransactionForm = (state) =>
 export const selectTransactions = (state) => state.transaction.transactions;
 export const selectIncome = (state) => state.transaction.income;
 export const selectExpenses = (state) => state.transaction.expenses;
+export const selectTransactionCache = (state) =>
+  state.transaction.transactionCache;
 export const selectEditTransactionForm = (state) =>
   state.transaction.editTransactionForm;
-export const selectEditTransaction = (state) =>
-  state.transaction.editTransaction;
+export const selectEditTransactionCache = (state) =>
+  state.transaction.editTransactionCache;
 export const selectDeleteTransactionBox = (state) =>
   state.transaction.deleteTransactionBox;
 export const selectDeleteTransaction = (state) =>

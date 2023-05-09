@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectEditTransaction,
-  setEditTransaction,
-} from "../../redux/features/transactions/transactionSlice";
 import styled from "styled-components";
+import {
+  deactivateEditTransactionForm,
+  deactivateTransactionForm,
+  selectEditTransactionCache,
+} from "../../redux/features/transactions/transactionSlice";
 import {
   activateCategoryForm,
   selectExpenseCategories,
@@ -12,27 +13,24 @@ import {
 } from "../../redux/features/categories/categorySlice";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import CloseButton from "../buttons/CloseButton";
 
 function EditTransactionForm() {
-  const transactionDetails = useSelector(selectEditTransaction);
+  const transaction = useSelector(selectEditTransactionCache);
 
   const [typeDropdown, setTypeDropdown] = useState(false);
   const [categoryDropdown, setCategoryDropdown] = useState(false);
-  const [title, setTitle] = useState(transactionDetails.title);
-  const [amount, setAmount] = useState(transactionDetails.amount);
-  const [type, setType] = useState(transactionDetails.type);
-  const [categoryID, setCategoryID] = useState("");
-  const [categoryName, setCategoryName] = useState("");
+  const [title, setTitle] = useState(transaction.title);
+  const [amount, setAmount] = useState(transaction.amount);
+  const [type, setType] = useState(transaction.type);
+  const [categoryID, setCategoryID] = useState(transaction.categoryID);
+  const [categoryName, setCategoryName] = useState(transaction.categoryName);
 
   const incomeCategories = useSelector(selectIncomeCategories);
   const expenseCategories = useSelector(selectExpenseCategories);
   const dispatch = useDispatch();
 
   const typeValues = ["expense", "income"];
-
-  useEffect(() => {
-    setCategoryName("");
-  }, [type]);
 
   const editTransaction = async (e) => {
     e.preventDefault();
@@ -44,7 +42,7 @@ function EditTransactionForm() {
     } else if (categoryName === "") {
       alert("Please select the category");
     } else {
-      await updateDoc(doc(db, "transactions", transactionDetails.id), {
+      await updateDoc(doc(db, "transactions", transaction.id), {
         title: title,
         amount: parseFloat(amount),
         type: type,
@@ -52,16 +50,8 @@ function EditTransactionForm() {
         categoryName: categoryName,
       });
 
-      dispatch(
-        setEditTransaction({
-          id: "",
-          title: "",
-          amount: "",
-          type: "",
-          categoryID: "",
-          categoryName: "",
-        })
-      );
+      setTitle("");
+      dispatch(deactivateEditTransactionForm());
     }
   };
 
@@ -89,12 +79,12 @@ function EditTransactionForm() {
         <SelectArea>
           <Type>
             <Label>Type</Label>
-            <Select className="type">
+            <Select
+              className="type"
+              onClick={() => setTypeDropdown(!typeDropdown)}
+            >
               <CurrentOption>{type}</CurrentOption>
-              <DropDown
-                src="/images/down.svg"
-                onClick={() => setTypeDropdown(!typeDropdown)}
-              />
+              <DropDown src="/images/down.svg" />
               <Options style={typeDropdown ? { display: "block" } : null}>
                 {typeValues.map((value, index) => (
                   <Option key={index}>
@@ -102,6 +92,7 @@ function EditTransactionForm() {
                       onClick={() => {
                         setType(value);
                         setTypeDropdown(!typeDropdown);
+                        setCategoryName("");
                       }}
                     >
                       {value}
@@ -114,18 +105,20 @@ function EditTransactionForm() {
           </Type>
           <Category>
             <Label>Category</Label>
-            <Select>
+            <Select onClick={() => setCategoryDropdown(!categoryDropdown)}>
               <CurrentOption>
                 {categoryName === "" ? "Select Category" : categoryName}
               </CurrentOption>
-              <DropDown
-                src="/images/down.svg"
-                onClick={() => setCategoryDropdown(!categoryDropdown)}
-              />
+              <DropDown src="/images/down.svg" />
               <Options style={categoryDropdown ? { display: "block" } : null}>
                 {type === "income" ? (
                   incomeCategories.length === 0 ? (
-                    <Option onClick={() => dispatch(activateCategoryForm())}>
+                    <Option
+                      onClick={() => {
+                        dispatch(activateCategoryForm());
+                        dispatch(deactivateTransactionForm());
+                      }}
+                    >
                       <Value>Add Category+</Value>
                     </Option>
                   ) : (
@@ -153,7 +146,12 @@ function EditTransactionForm() {
                     ))
                   )
                 ) : expenseCategories.length === 0 ? (
-                  <Option onClick={() => dispatch(activateCategoryForm())}>
+                  <Option
+                    onClick={() => {
+                      dispatch(activateCategoryForm());
+                      dispatch(deactivateTransactionForm());
+                    }}
+                  >
                     <Value>Add Category+</Value>
                   </Option>
                 ) : (
@@ -178,7 +176,8 @@ function EditTransactionForm() {
             </Select>
           </Category>
         </SelectArea>
-        <Submit type="submit">Update transaction</Submit>
+        <CloseButton />
+        <Submit type="submit">Update</Submit>
       </Form>
     </Container>
   );
@@ -306,6 +305,8 @@ const Submit = styled.button`
   font-size: 20px;
   font-weight: 500;
   color: #f9f9f9;
+  border: 2px solid transparent;
+  cursor: pointer;
 `;
 
 export default EditTransactionForm;

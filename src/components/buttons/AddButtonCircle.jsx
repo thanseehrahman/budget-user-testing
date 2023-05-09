@@ -2,17 +2,27 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { activateTransactionForm } from "../../redux/features/transactions/transactionSlice";
+import { activateCategoryForm } from "../../redux/features/categories/categorySlice";
 
-function AddTransactionButton() {
+function AddButtonCircle({ add }) {
   const dispatch = useDispatch();
 
   return (
     <Container
       onClick={() => {
-        dispatch(activateTransactionForm());
+        dispatch(
+          add === "transaction"
+            ? activateTransactionForm()
+            : activateCategoryForm()
+        );
       }}
+      style={{ background: add === "transaction" ? "#4cbe5e" : "#bedd42" }}
     >
-      <Plus src="/images/plus.svg" />
+      <Plus
+        src={
+          add === "transaction" ? "/images/plus.svg" : "/images/plus-dark.svg"
+        }
+      />
     </Container>
   );
 }
@@ -20,7 +30,6 @@ function AddTransactionButton() {
 const Container = styled.div`
   height: 60px;
   width: 60px;
-  background: #4cbe5e;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +43,8 @@ const Container = styled.div`
 `;
 
 const Plus = styled.img`
+  width: 40px;
   display: block;
 `;
 
-export default AddTransactionButton;
+export default AddButtonCircle;

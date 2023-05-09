@@ -2,16 +2,26 @@ import { addDoc, collection } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { db } from "../../firebase";
-import { useDispatch } from "react-redux";
-import { deactivateCategoryForm } from "../../redux/features/categories/categorySlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  deactivateCategoryForm,
+  selectCategoryCache,
+  setCategoryCache,
+} from "../../redux/features/categories/categorySlice";
 import { Link } from "react-router-dom";
+import AddButtonForm from "../buttons/AddButtonForm";
+import CloseButton from "../buttons/CloseButton";
 
 function AddCategoryForm() {
+  const categoryCache = useSelector(selectCategoryCache);
+
   const [typeDropdown, setTypeDropdown] = useState(false);
   const [categoryDropdown, setCategoryDropdown] = useState(false);
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("expense");
-  const [category, setCategory] = useState("");
+  const [title, setTitle] = useState(categoryCache.title);
+  const [type, setType] = useState(
+    categoryCache.type === "" ? "expense" : categoryCache.type
+  );
+  const [category, setCategory] = useState(categoryCache.category);
 
   const dispatch = useDispatch();
 
@@ -26,8 +36,14 @@ function AddCategoryForm() {
   ];
 
   useEffect(() => {
-    setCategory("");
-  }, [type]);
+    dispatch(
+      setCategoryCache({
+        title: title,
+        type: type,
+        category: category,
+      })
+    );
+  }, [title, type, category, dispatch]);
 
   const addCategory = async (e) => {
     e.preventDefault();
@@ -45,7 +61,6 @@ function AddCategoryForm() {
       });
 
       setTitle("");
-      dispatch(deactivateCategoryForm());
     }
   };
 
@@ -77,6 +92,7 @@ function AddCategoryForm() {
                     onClick={() => {
                       setType(value);
                       setTypeDropdown(!typeDropdown);
+                      setCategory("");
                     }}
                   >
                     {value}
@@ -155,7 +171,11 @@ function AddCategoryForm() {
             info
           </Link>
         </Note>
-        <Submit type="submit">Add category</Submit>
+        <Buttons>
+          <CloseButton />
+          <AddButtonForm add="transaction" />
+        </Buttons>
+        <Submit type="submit">Add Category</Submit>
       </Form>
     </Container>
   );
@@ -273,7 +293,15 @@ const Note = styled.p`
   margin-bottom: 30px;
 `;
 
+const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+`;
+
 const Submit = styled.button`
+  margin-top: 30px;
   width: 100%;
   padding: 8px;
   background: #4c7dfc;

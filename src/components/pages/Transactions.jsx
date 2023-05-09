@@ -1,123 +1,96 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import {
-  activateDeleteTransactionBox,
-  activateEditTransactionForm,
-  activateTransactionForm,
   selectExpenses,
   selectIncome,
   selectTransactions,
-  setDeleteTransaction,
-  setEditTransaction,
 } from "../../redux/features/transactions/transactionSlice";
-import { Link } from "react-router-dom";
+import AddButtonCircle from "../buttons/AddButtonCircle";
+import Balance from "../objects/Balance";
+import Dialogue from "../objects/Dialogue";
+import Transaction from "../objects/Transaction";
+import { TabTitle } from "../utilities/titleFunction";
 
 function Transactions() {
-  const [totalIncome, setTotalIncome] = useState(0);
-  const [totalExpense, setTotalExpense] = useState(0);
+  TabTitle("Transactions - Budget Ease");
+
+  const [variable, setVariable] = useState("");
+  const [array, setArray] = useState([]);
+  const [sortDropdown, setSortDropdown] = useState(false);
 
   const transactions = useSelector(selectTransactions);
   const income = useSelector(selectIncome);
   const expenses = useSelector(selectExpenses);
-  const dispatch = useDispatch();
 
   useEffect(() => {
-    const incomeTotal = income.reduce((acc, curr) => acc + curr.amount, 0);
-    const expenseTotal = expenses.reduce((acc, curr) => acc + curr.amount, 0);
+    const income = transactions.filter(
+      (transaction) => transaction.type === "income"
+    );
+    const expense = transactions.filter(
+      (transaction) => transaction.type === "expense"
+    );
 
-    setTotalIncome(incomeTotal);
-    setTotalExpense(expenseTotal);
-  }, [income, expenses]);
+    const sortArray = (value) => {
+      let data =
+        value === "" ? transactions : value === "income" ? income : expense;
+      setArray(data);
+    };
+
+    sortArray(variable);
+  }, [transactions, variable]);
+
+  const sortOptions = ["All", "income", "expense"];
 
   return (
     <Container>
       <Top>
         <Heading>Transactions</Heading>
+        <Right>
+          <SortArea>
+            <SortBy>Sortby</SortBy>
+            <Select onClick={() => setSortDropdown(!sortDropdown)}>
+              <CurrentOption>
+                {variable === "" ? "All" : variable}
+              </CurrentOption>
+              <DropDown src="/images/down-small.svg" />
+              <Options style={sortDropdown ? { display: "block" } : null}>
+                {sortOptions.map((value, index) => (
+                  <Option
+                    onClick={() => {
+                      setVariable(value === "All" ? "" : value);
+                      setSortDropdown(!sortDropdown);
+                    }}
+                    key={index}
+                  >
+                    <Value>{value}</Value>
+                  </Option>
+                ))}
+              </Options>
+            </Select>
+          </SortArea>
+          <AddButtonCircle add="transaction" />
+        </Right>
       </Top>
       <Grid>
         <Scroll>
           <SmallGrid>
-            {transactions.map((transaction, index) => (
-              <Transaction key={index}>
-                <Name>
-                  <Title>{transaction.title}</Title>
-                </Name>
-                <Category>
-                  <Link to={"/category/" + transaction.categoryID}>
-                    <Title className="category">
-                      {transaction.categoryName}
-                    </Title>
-                  </Link>
-                </Category>
-                <Type>
-                  <Title
-                    className={`type ${
-                      transaction.type === "income" ? "income" : "expense"
-                    }`}
-                  >
-                    {transaction.type}
-                  </Title>
-                </Type>
-                <Amount>
-                  <Title
-                    className={`amount ${
-                      transaction.type === "income" ? "income" : "expense"
-                    }`}
-                  >
-                    {transaction.type === "income" ? "+" : "-"}
-                    {transaction.amount}
-                  </Title>
-                </Amount>
-                <Edit
-                  onClick={() => {
-                    dispatch(activateEditTransactionForm());
-                    dispatch(
-                      setEditTransaction({
-                        id: transaction.id,
-                        title: transaction.title,
-                        amount: transaction.amount,
-                        type: transaction.type,
-                      })
-                    );
-                  }}
-                >
-                  <Icon src="/images/edit.svg" />
-                </Edit>
-                <Delete
-                  onClick={() => {
-                    dispatch(activateDeleteTransactionBox());
-                    dispatch(setDeleteTransaction({ id: transaction.id }));
-                  }}
-                >
-                  <Icon src="/images/delete.svg" />
-                </Delete>
-              </Transaction>
-            ))}
+            {array.length === 0 ? (
+              <Dialogue type="transaction" />
+            ) : (
+              array.map((transaction, index) => (
+                <Transaction transaction={transaction} key={index} />
+              ))
+            )}
+            <EmptyTransaction />
           </SmallGrid>
           <Bottom />
         </Scroll>
-        <Balance>
-          <SubHeading>Balance</SubHeading>
-          {transactions.length === 0 ? (
-            <Title
-              className="add"
-              onClick={() => dispatch(activateTransactionForm())}
-            >
-              Click to add Transaction <Span>+</Span>
-            </Title>
-          ) : (
-            <Box>
-              <Flex>
-                <Calc>
-                  <TotalIncome>+{totalIncome}</TotalIncome>
-                  <TotalExpense>-{totalExpense}</TotalExpense>
-                </Calc>
-                <Equal>= {totalIncome - totalExpense}</Equal>
-              </Flex>
-            </Box>
-          )}
-        </Balance>
+        <Balance
+          transactions={transactions}
+          income={income}
+          expenses={expenses}
+        />
       </Grid>
     </Container>
   );
@@ -135,6 +108,67 @@ const Top = styled.div`
 const Heading = styled.h3`
   font-size: 48px;
   color: #f9f9f9;
+`;
+
+const Right = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
+
+const SortArea = styled.div`
+  display: flex;
+`;
+
+const SortBy = styled.h6`
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const Select = styled.div`
+  min-width: 120px;
+  padding: 10px 20px;
+  padding-right: 12px;
+  position: relative;
+  background: #202020;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const CurrentOption = styled.h5`
+  font-size: 16px;
+  font-weight: 500;
+  color: #848484;
+  text-transform: capitalize;
+`;
+
+const DropDown = styled.img``;
+
+const Options = styled.div`
+  position: absolute;
+  left: 0;
+  top: 42px;
+  width: 100%;
+  background: #1a1a1a;
+  border: 2px solid #2b2b2b;
+  border-radius: 8px;
+  display: none;
+  z-index: 3;
+`;
+
+const Option = styled.div`
+  padding: 10px 20px 0;
+`;
+
+const Value = styled.h5`
+  font-size: 16px;
+  font-weight: 500;
+  color: #f9f9f9;
+  margin-bottom: 8px;
+  text-transform: capitalize;
 `;
 
 const Grid = styled.div`
@@ -158,51 +192,15 @@ const SmallGrid = styled.div`
   display: grid;
   grid-gap: 32px;
   grid-template-columns: repeat(1, 1fr);
-  padding-bottom: 90px;
 `;
 
-const Transaction = styled.div`
-  display: grid;
-  grid-template-columns: repeat(16, 1fr);
+const EmptyTransaction = styled.div`
   padding: 24px 20px;
   background: #202020;
   border-radius: 12px;
-`;
-
-const Name = styled.div`
-  grid-column: span 4;
-`;
-
-const Title = styled.h5`
-  font-size: 20px;
-  font-weight: 600;
-
-  &.category {
-    color: #848484;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  &.type.income {
-    transition: transform 0.2s ease-in-out;
-
-    &:hover {
-      transform: translateY(-4px);
-    }
-    color: #4cbe5e;
-  }
-  &.type.expense {
-    color: #ec3939;
-  }
-
-  &.amount.income {
-    color: #4f883b;
-  }
-  &.amount.expense {
-    color: #c33939;
-  }
+  margin-bottom: 32px;
+  opacity: 0;
+  visibility: hidden;
 `;
 
 const Bottom = styled.div`
@@ -211,88 +209,6 @@ const Bottom = styled.div`
   height: 120px;
   width: 100%;
   background: linear-gradient(180deg, rgba(25, 25, 25, 0) 0%, #191919 100%);
-`;
-
-const Category = styled.div`
-  grid-column: span 4;
-  text-transform: capitalize;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 0 5px;
-`;
-
-const Type = styled(Category)`
-  grid-column: span 3;
-`;
-
-const Amount = styled(Category)`
-  grid-column: span 3;
-`;
-
-const Edit = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-4px);
-  }
-`;
-
-const Icon = styled.img``;
-
-const Delete = styled(Edit)``;
-
-const Balance = styled.div`
-  padding: 40px;
-  background: #202020;
-  border-radius: 20px;
-  z-index: 2;
-`;
-
-const SubHeading = styled.h4`
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 20px;
-`;
-
-const Span = styled.span`
-  color: #4cbe5e;
-`;
-
-const Box = styled.div`
-  width: 100%;
-  padding: 40px 0;
-  background: #2b2b2b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  border: 2px solid #4b4b4b;
-`;
-
-const Flex = styled.div``;
-
-const Calc = styled.div``;
-
-const TotalIncome = styled.h6`
-  font-size: 20px;
-  font-weight: 600;
-  margin-bottom: 10px;
-  display: inline-block;
-  margin-right: 10px;
-  color: #4f883b;
-`;
-
-const TotalExpense = styled(TotalIncome)`
-  color: #c33939;
-`;
-
-const Equal = styled.h5`
-  font-size: 32px;
-  font-weight: 600;
 `;
 
 export default Transactions;

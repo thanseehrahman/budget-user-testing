@@ -19,7 +19,7 @@ const Background = styled.div`
   place-items: center;
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(5px);
-  z-index: 3;
+  z-index: 4;
 `;
 
 export default AddCategory;

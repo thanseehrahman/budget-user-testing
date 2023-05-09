@@ -1,21 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import {
-  selectCategories,
-} from "../../redux/features/categories/categorySlice";
+import { selectCategories } from "../../redux/features/categories/categorySlice";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { TabTitle } from "../utilities/titleFunction";
+import AddButtonCircle from "../buttons/AddButtonCircle";
 
 function Categories() {
+  TabTitle("Categories - Budget Ease");
+
+  const [variable, setVariable] = useState("");
+  const [array, setArray] = useState([]);
+  const [sortDropdown, setSortDropdown] = useState(false);
+
   const categories = useSelector(selectCategories);
+
+  useEffect(() => {
+    const income = categories.filter((category) => category.type === "income");
+    const expense = categories.filter(
+      (category) => category.type === "expense"
+    );
+
+    const sortArray = (value) => {
+      let data =
+        value === "" ? categories : value === "income" ? income : expense;
+      setArray(data);
+    };
+
+    sortArray(variable);
+  }, [categories, variable]);
+
+  const sortOptions = ["All", "income", "expense"];
 
   return (
     <Container>
-      <Heading>Categories</Heading>
+      <Top>
+        <Heading>Categories</Heading>
+        <Right>
+          <SortArea>
+            <SortBy>Sortby</SortBy>
+            <Select onClick={() => setSortDropdown(!sortDropdown)}>
+              <CurrentOption>
+                {variable === "" ? "All" : variable}
+              </CurrentOption>
+              <DropDown src="/images/down-small.svg" />
+              <Options style={sortDropdown ? { display: "block" } : null}>
+                {sortOptions.map((value, index) => (
+                  <Option
+                    onClick={() => {
+                      setVariable(value === "All" ? "" : value);
+                      setSortDropdown(!sortDropdown);
+                    }}
+                    key={index}
+                  >
+                    <Value>{value}</Value>
+                  </Option>
+                ))}
+              </Options>
+            </Select>
+          </SortArea>
+          <AddButtonCircle add="category" />
+        </Right>
+      </Top>
       <ListArea>
         <Scroll>
           <Grid>
-            {categories.map((category, index) => (
+            {array.map((category, index) => (
               <Category key={index}>
                 <Content>
                   <Title>{category.title}</Title>
@@ -26,14 +76,21 @@ function Categories() {
                     <Icon
                       src={
                         category.type === "income"
-                          ? "/images/right-income.svg"
-                          : "/images/right-expense.svg"
+                          ? "/images/right-green.svg"
+                          : "/images/right-red.svg"
                       }
                     />
                   </Enter>
                 </Link>
               </Category>
             ))}
+            <Category
+              style={{
+                marginBottom: "32px",
+                opacity: "0",
+                visibility: "hidden",
+              }}
+            />
           </Grid>
           <Bottom />
         </Scroll>
@@ -46,10 +103,77 @@ const Container = styled.div`
   margin-bottom: -60px;
 `;
 
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 60px;
+`;
+
 const Heading = styled.h3`
   font-size: 48px;
   color: #f9f9f9;
-  margin-bottom: 60px;
+`;
+
+const Right = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
+
+const SortArea = styled.div`
+  display: flex;
+`;
+
+const SortBy = styled.h6`
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const Select = styled.div`
+  min-width: 120px;
+  padding: 10px 20px;
+  padding-right: 12px;
+  position: relative;
+  background: #202020;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const CurrentOption = styled.h5`
+  font-size: 16px;
+  font-weight: 500;
+  color: #848484;
+  text-transform: capitalize;
+`;
+
+const DropDown = styled.img``;
+
+const Options = styled.div`
+  position: absolute;
+  left: 0;
+  top: 42px;
+  width: 100%;
+  background: #1a1a1a;
+  border: 2px solid #2b2b2b;
+  border-radius: 8px;
+  display: none;
+  z-index: 3;
+`;
+
+const Option = styled.div`
+  padding: 10px 20px 0;
+`;
+
+const Value = styled.h5`
+  font-size: 16px;
+  font-weight: 500;
+  color: #f9f9f9;
+  margin-bottom: 8px;
+  text-transform: capitalize;
 `;
 
 const ListArea = styled.div`

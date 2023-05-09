@@ -23,8 +23,8 @@ function SignIn() {
     <Background>
       <Container>
         <Heading>
-          Register or Login to <br />
-          <span>Budget King</span>
+          Welcome to <br />
+          <span>Budget Ease</span>
         </Heading>
         <Register>
           <Form>

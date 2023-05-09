@@ -1,7 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { TabTitle } from "../utilities/titleFunction";
 
 function Statistics() {
+  TabTitle("Statistics - Budget Ease");
+
   return (
     <Container>
       <Heading>Statistics</Heading>
