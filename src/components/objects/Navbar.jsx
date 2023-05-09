@@ -1,52 +1,73 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { activateTransactionForm } from "../../redux/features/transactions/transactionSlice";
 import { useDispatch } from "react-redux";
 import { activateCategoryForm } from "../../redux/features/categories/categorySlice";
 
 function Navbar() {
-  const { pathname } = useLocation();
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
   const dispatch = useDispatch();
 
-  const setBackground = (path) => {
-    return pathname === path
-      ? { backgroundColor: "rgba(255,255,255,0.05)" }
-      : null;
-  };
-
-  const setColor = (path) => {
-    return pathname === path ? { color: "#f9f9f9" } : null;
-  };
+  const links = [
+    {
+      title: "Dashboard",
+      img: {
+        img: "/images/dashboard.svg",
+        active: "/images/dashboard-active.svg",
+      },
+      path: "/",
+    },
+    {
+      title: "Transactions",
+      img: {
+        img: "/images/transactions.svg",
+        active: "/images/transactions-active.svg",
+      },
+      path: "/transactions",
+    },
+    {
+      title: "Categories",
+      img: {
+        img: "/images/categories.svg",
+        active: "/images/categories-active.svg",
+      },
+      path: "/categories",
+    },
+    {
+      title: "Statistics",
+      img: {
+        img: "/images/statistics.svg",
+        active: "/images/statistics-active.svg",
+      },
+      path: "/statistics",
+    },
+    {
+      title: "Info",
+      img: {
+        img: "/images/info.svg",
+        active: "/images/info-active.svg",
+      },
+      path: "/info",
+    },
+  ];
 
   return (
     <Sidebar>
       <Top>
-        <Dashboard style={setBackground("/")}>
-          <Link to="/">
-            <Title style={setColor("/")}>Dashboard</Title>
+        {links.map((link, index) => (
+          <Link to={link.path} onClick={() => setSelectedIndex(index)}>
+            <Item key={index} selected={selectedIndex === index}>
+              <Content>
+                <Icon
+                  src={selectedIndex === index ? link.img.active : link.img.img}
+                />
+                <Title selected={selectedIndex === index}>{link.title}</Title>
+              </Content>
+            </Item>
           </Link>
-        </Dashboard>
-        <Transactions style={setBackground("/transactions")}>
-          <Link to="/transactions">
-            <Title style={setColor("/transactions")}>Transactions</Title>
-          </Link>
-        </Transactions>
-        <Categories style={setBackground("/categories")}>
-          <Link to="/categories">
-            <Title style={setColor("/categories")}>Categories</Title>
-          </Link>
-        </Categories>
-        <Statistics style={setBackground("/statistics")}>
-          <Link to="/statistics">
-            <Title style={setColor("/statistics")}>Statistics</Title>
-          </Link>
-        </Statistics>
-        <Info style={setBackground("/info")}>
-          <Link to="/info">
-            <Title style={setColor("/info")}>Info</Title>
-          </Link>
-        </Info>
+        ))}
       </Top>
       <Bottom>
         <NewTransaction onClick={() => dispatch(activateTransactionForm())}>
@@ -79,23 +100,25 @@ const Sidebar = styled.div`
 
 const Top = styled.div``;
 
-const Dashboard = styled.div`
+const Item = styled.div`
   padding: 10px 0 10px 56px;
+  background: ${(props) =>
+    props.selected ? "rgba(255, 255, 255, 0.05)" : "transparent"};
 `;
+
+const Content = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const Icon = styled.img``;
 
 const Title = styled.h6`
   font-size: 20px;
   font-weight: 500;
-  color: #848484;
+  color: ${(props) => (props.selected ? "#f9f9f9" : "#848484")};
 `;
-
-const Transactions = styled(Dashboard)``;
-
-const Categories = styled(Dashboard)``;
-
-const Statistics = styled(Dashboard)``;
-
-const Info = styled(Dashboard)``;
 
 const Bottom = styled.div``;
 
