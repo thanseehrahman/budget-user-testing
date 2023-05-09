@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { activateTransactionForm } from "../../redux/features/transactions/transactionSlice";
 import { useDispatch } from "react-redux";
 import { activateCategoryForm } from "../../redux/features/categories/categorySlice";
 
 function Navbar() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const location = useLocation();
+  const path = location.pathname;
   const dispatch = useDispatch();
 
   const links = [
@@ -57,13 +57,13 @@ function Navbar() {
     <Sidebar>
       <Top>
         {links.map((link, index) => (
-          <Link to={link.path} onClick={() => setSelectedIndex(index)}>
-            <Item key={index} selected={selectedIndex === index}>
+          <Link key={index} to={link.path}>
+            <Item selected={link.path === path}>
               <Content>
                 <Icon
-                  src={selectedIndex === index ? link.img.active : link.img.img}
+                  src={link.path === path ? link.img.active : link.img.img}
                 />
-                <Title selected={selectedIndex === index}>{link.title}</Title>
+                <Title selected={link.path === path}>{link.title}</Title>
               </Content>
             </Item>
           </Link>
