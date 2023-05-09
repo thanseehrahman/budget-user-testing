@@ -171,11 +171,11 @@ function AddCategoryForm() {
             info
           </Link>
         </Note>
+        <Submit type="submit">Add Category</Submit>
         <Buttons>
           <CloseButton />
           <AddButtonForm add="transaction" />
         </Buttons>
-        <Submit type="submit">Add Category</Submit>
       </Form>
     </Container>
   );
@@ -301,7 +301,7 @@ const Buttons = styled.div`
 `;
 
 const Submit = styled.button`
-  margin-top: 30px;
+  margin-bottom: 30px;
   width: 100%;
   padding: 8px;
   background: #4c7dfc;

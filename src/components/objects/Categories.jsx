@@ -2,6 +2,7 @@ import React from "react";
 import GridElement from "./GridElement";
 import AddButton from "../buttons/AddButton";
 import styled from "styled-components";
+import Dialogue from "./Dialogue";
 import { Link } from "react-router-dom";
 
 function Categories({ categories, count, rowspan }) {
@@ -19,15 +20,19 @@ function Categories({ categories, count, rowspan }) {
           {categories.length <= 1 ? "Category Added" : "Categories Added"}
         </Label>
       )}
-      <List>
-        {categories.slice(0, 8).map((category, index) => (
-          <Item key={index}>
-            <Link to={"/category/" + category.id}>
-              <Title>{category.title}</Title>
-            </Link>
-          </Item>
-        ))}
-      </List>
+      {categories.length === 0 ? (
+        <Dialogue type="category" />
+      ) : (
+        <List>
+          {categories.slice(0, 8).map((category, index) => (
+            <Item key={index}>
+              <Link to={"/category/" + category.id}>
+                <Title>{category.title}</Title>
+              </Link>
+            </Item>
+          ))}
+        </List>
+      )}
     </GridElement>
   );
 }

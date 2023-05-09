@@ -73,6 +73,15 @@ function AddTransactionForm() {
     }
   };
 
+  const handleAmount = (e) => {
+    const keyCode = e.keyCode || e.which;
+    const keyValue = String.fromCharCode(keyCode);
+    const regex = /[0-9]|\./;
+    if (!regex.test(keyValue)) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <Container>
       <Heading>Add Transaction</Heading>
@@ -90,6 +99,7 @@ function AddTransactionForm() {
           <Label>Amount</Label>
           <Input
             onChange={(e) => setAmount(e.target.value)}
+            onKeyPress={handleAmount}
             value={amount}
             placeholder="0000"
           />
@@ -194,11 +204,11 @@ function AddTransactionForm() {
             </Select>
           </Category>
         </SelectArea>
+        <Submit type="submit">Add Transaction</Submit>
         <Buttons>
           <CloseButton />
           <AddButtonForm add="category" />
         </Buttons>
-        <Submit type="submit">Add Transaction</Submit>
       </Form>
     </Container>
   );
@@ -323,7 +333,7 @@ const Buttons = styled.div`
 `;
 
 const Submit = styled.button`
-  margin-top: 30px;
+  margin-bottom: 30px;
   width: 100%;
   padding: 8px;
   background: #4c7dfc;
