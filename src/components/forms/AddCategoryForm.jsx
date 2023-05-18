@@ -104,10 +104,10 @@ function AddCategoryForm() {
           </Select>
         </Type>
         <Category>
-          <Label>Category</Label>
+          <Label>Category Type</Label>
           <Select onClick={() => setCategoryDropdown(!categoryDropdown)}>
             <CurrentOption>
-              {category === "" ? "Select Category" : category}
+              {category === "" ? "Select Category Type" : category}
             </CurrentOption>
             <DropDown src="/images/down.svg" />
             <Options style={categoryDropdown ? { display: "block" } : null}>
@@ -160,7 +160,7 @@ function AddCategoryForm() {
           </Select>
         </Category>
         <Note>
-          Don't know how to choose category? check out{" "}
+          Don't know how to choose category type? check out{" "}
           <Link
             to="/info"
             style={{ textDecoration: "underline", color: "#4c7dfc" }}

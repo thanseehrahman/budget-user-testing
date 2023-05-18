@@ -13,7 +13,8 @@ function Info() {
         <AddButtonCircle add="category" />
       </Top>
       <Direction>
-        Select type of categories based on this information.
+        Select <Span>category type</Span> for categories based on this
+        information.
       </Direction>
       <Income>
         <SubHeading>Income Categories</SubHeading>
@@ -98,6 +99,10 @@ const Direction = styled.p`
   font-weight: 600;
   color: #f9f9f9;
   margin-bottom: 60px;
+`;
+
+const Span = styled.span`
+  color: #bedd42;
 `;
 
 const Income = styled.div`
