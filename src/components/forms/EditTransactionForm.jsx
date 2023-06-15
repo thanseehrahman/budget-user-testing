@@ -14,6 +14,8 @@ import {
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import CloseButton from "../buttons/CloseButton";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function EditTransactionForm() {
   const transaction = useSelector(selectEditTransactionCache);
@@ -22,6 +24,7 @@ function EditTransactionForm() {
   const [categoryDropdown, setCategoryDropdown] = useState(false);
   const [title, setTitle] = useState(transaction.title);
   const [amount, setAmount] = useState(transaction.amount);
+  const [date, setDate] = useState(new Date(transaction.date.seconds * 1000));
   const [type, setType] = useState(transaction.type);
   const [categoryID, setCategoryID] = useState(transaction.categoryID);
   const [categoryName, setCategoryName] = useState(transaction.categoryName);
@@ -48,6 +51,7 @@ function EditTransactionForm() {
         type: type,
         categoryID: categoryID,
         categoryName: categoryName,
+        date: date,
       });
 
       setTitle("");
@@ -77,15 +81,21 @@ function EditTransactionForm() {
             placeholder="Transaction title"
           />
         </Title>
-        <Amount>
-          <Label>Amount</Label>
-          <Input
-            onChange={(e) => setAmount(e.target.value)}
-            onKeyPress={handleAmount}
-            value={amount}
-            placeholder="0000"
-          />
-        </Amount>
+        <PickArea>
+          <Amount>
+            <Label>Amount</Label>
+            <Input
+              onChange={(e) => setAmount(e.target.value)}
+              onKeyPress={handleAmount}
+              value={amount}
+              placeholder="0000"
+            />
+          </Amount>
+          <DateTime>
+            <Label>Date</Label>
+            <DatePicker selected={date} onChange={(e) => setDate(e)} />
+          </DateTime>
+        </PickArea>
         <SelectArea>
           <Type>
             <Label>Type</Label>
@@ -235,7 +245,18 @@ const Input = styled.input`
   font-weight: 500;
 `;
 
-const Amount = styled(Title)``;
+const PickArea = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+`;
+
+const Amount = styled(Title)`
+  margin-bottom: 0;
+`;
+
+const DateTime = styled(Amount)``;
 
 const SelectArea = styled.div`
   display: flex;

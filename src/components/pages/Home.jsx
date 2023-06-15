@@ -1,5 +1,5 @@
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";
@@ -13,24 +13,27 @@ import {
 import AddTransaction from "./AddTransaction";
 import {
   selectCategoryForm,
+  selectDeleteCategoryBox,
   setCategories,
 } from "../../redux/features/categories/categorySlice";
 import AddCategory from "../pages/AddCategory";
 import EditTransaction from "./EditTransaction";
 import DeleteTransaction from "./DeleteTransaction";
-import { selectNavbar } from "../../redux/features/nav/navbarSlice";
 import Navbar from "../objects/Navbar";
+import DeleteCategory from "./DeleteCategory";
+import { selectNavbar } from "../../redux/features/navbar/navbarSlice";
 
 function Home() {
   const transactionForm = useSelector(selectTransactionForm);
   const categoryForm = useSelector(selectCategoryForm);
   const editTransactionForm = useSelector(selectEditTransactionForm);
   const deleteTransactionBox = useSelector(selectDeleteTransactionBox);
+  const deleteCategoryBox = useSelector(selectDeleteCategoryBox);
   const navbar = useSelector(selectNavbar);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const q = query(collection(db, "transactions"), orderBy("time", "desc"));
+    const q = query(collection(db, "transactions"), orderBy("date", "desc"));
     const r = query(collection(db, "categories"), orderBy("time", "desc"));
 
     onSnapshot(q, (querySnapshot) => {
@@ -104,9 +107,11 @@ function Home() {
       {editTransactionForm ? <EditTransaction /> : null}
       {deleteTransactionBox ? <DeleteTransaction /> : null}
       {categoryForm ? <AddCategory /> : null}
-      {navbar ? <Navbar /> : null}
-      <Background navbar={navbar}>
-          <Outlet />
+      {deleteCategoryBox ? <DeleteCategory /> : null}
+      <Navbar />
+      <Background expand={navbar}>
+        <Outlet />
+        <Freeze active={navbar} />
       </Background>
     </Container>
   );
@@ -118,13 +123,34 @@ const Container = styled.div`
 
 const Background = styled.div`
   height: 100vh;
-  width: ${(props) => (props.navbar ? "calc(100% - 270px)" : "100%")};
+  width: calc(100% - 270px);
   overflow-x: hidden;
   position: relative;
-  left: ${(props) => (props.navbar ? "270px" : "0")};
+  left: 270px;
   padding: 90px 60px 60px;
   background: #191919;
-  transition: all 0.6 ease-in-out
+  transition: all 0.6 ease-in-out;
+
+  @media (max-width: 1024px) {
+    width: calc(100% - 100px);
+    left: 100px;
+  }
+`;
+
+const Freeze = styled.div`
+  height: 100%;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: none;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(5px);
+  z-index: 2;
+
+  @media (max-width: 1024px) {
+    display: ${(props) => (props.active ? "block" : "none")};
+  }
 `;
 
 export default Home;

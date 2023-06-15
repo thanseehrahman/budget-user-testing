@@ -1,5 +1,5 @@
-import React from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -8,9 +8,26 @@ import {
   setDeleteTransaction,
   setEditTransactionCache,
 } from "../../redux/features/transactions/transactionSlice";
+import { selectCategories } from "../../redux/features/categories/categorySlice";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 function Transaction({ transaction }) {
+  const categories = useSelector(selectCategories);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const matchCategory = categories.find(
+      (category) => category.id === transaction.categoryID
+    );
+
+    if (!matchCategory) {
+      updateDoc(doc(db, "transactions", transaction.id), {
+        categoryName: "",
+        categoryID: "",
+      });
+    }
+  }, [transaction, categories]);
 
   return (
     <Item>
@@ -52,6 +69,7 @@ function Transaction({ transaction }) {
               type: transaction.type,
               categoryID: transaction.categoryID,
               categoryName: transaction.categoryName,
+              date: transaction.date,
             })
           );
         }}

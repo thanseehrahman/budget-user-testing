@@ -34,7 +34,7 @@ function Dashboard() {
         <Heading>Dashboard</Heading>
         <AddButtonCircle add="transaction" />
       </Top>
-      <Grid>
+      <TopGrid>
         <GridElement subheading={countArray(transactions)} type="small">
           <Label>
             {transactions.length <= 1
@@ -48,9 +48,7 @@ function Dashboard() {
           color="#4f883b"
         >
           <Label>
-            {transactions.length <= 1
-              ? "Transaction Added"
-              : "Transactions Added"}
+            {transactions.length <= 1 ? "Income Added" : "Income Added"}
           </Label>
         </GridElement>
         <GridElement
@@ -59,11 +57,11 @@ function Dashboard() {
           color="#c33939"
         >
           <Label>
-            {transactions.length <= 1
-              ? "Transaction Added"
-              : "Transactions Added"}
+            {transactions.length <= 1 ? "Expense Added" : "Expenses Added"}
           </Label>
         </GridElement>
+      </TopGrid>
+      <Grid>
         <Balance
           transactions={transactions}
           income={income}
@@ -74,7 +72,7 @@ function Dashboard() {
         <Categories
           categories={categories}
           count={countArray(categories)}
-          rowspan="2/4"
+          rowspan="1/3"
         />
       </Grid>
     </Container>
@@ -95,10 +93,25 @@ const Heading = styled.h3`
   color: #f9f9f9;
 `;
 
+const TopGrid = styled.div`
+  display: grid;
+  grid-gap: 32px;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 32px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
+`;
+
 const Grid = styled.div`
   display: grid;
   grid-gap: 32px;
   grid-template-columns: repeat(3, 1fr);
+
+  @media (max-width: 1280px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const Label = styled.p`

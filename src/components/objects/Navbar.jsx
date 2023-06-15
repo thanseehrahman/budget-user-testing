@@ -2,12 +2,18 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { activateTransactionForm } from "../../redux/features/transactions/transactionSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { activateCategoryForm } from "../../redux/features/categories/categorySlice";
+import {
+  expandNavbar,
+  minimizeNavbar,
+  selectNavbar,
+} from "../../redux/features/navbar/navbarSlice";
 
 function Navbar() {
   const location = useLocation();
   const path = location.pathname;
+  const navbar = useSelector(selectNavbar);
   const dispatch = useDispatch();
 
   const links = [
@@ -54,29 +60,48 @@ function Navbar() {
   ];
 
   return (
-    <Sidebar>
+    <Sidebar expand={navbar}>
+      <Hamburger active={navbar} onClick={() => dispatch(expandNavbar())}>
+        <Icon src="/images/hamburger.svg" />
+      </Hamburger>
       <Top>
         {links.map((link, index) => (
-          <Link key={index} to={link.path}>
-            <Item selected={link.path === path}>
+          <Link
+            key={index}
+            to={link.path}
+            onClick={() => dispatch(minimizeNavbar())}
+          >
+            <Item selected={link.path === path} expand={navbar}>
               <Content>
                 <Icon
                   src={link.path === path ? link.img.active : link.img.img}
                 />
-                <Title selected={link.path === path}>{link.title}</Title>
+                <Title selected={link.path === path} expand={navbar}>
+                  {link.title}
+                </Title>
               </Content>
             </Item>
           </Link>
         ))}
       </Top>
       <Bottom>
-        <NewTransaction onClick={() => dispatch(activateTransactionForm())}>
-          <Title>
+        <NewTransaction
+          onClick={() => {
+            dispatch(activateTransactionForm());
+            dispatch(minimizeNavbar());
+          }}
+        >
+          <Title expand={navbar}>
             New Transaction <Span>+</Span>
           </Title>
         </NewTransaction>
-        <NewCategory onClick={() => dispatch(activateCategoryForm())}>
-          <Title>
+        <NewCategory
+          onClick={() => {
+            dispatch(activateCategoryForm());
+            dispatch(minimizeNavbar());
+          }}
+        >
+          <Title expand={navbar}>
             New Category <Span className="category">+</Span>
           </Title>
         </NewCategory>
@@ -96,14 +121,40 @@ const Sidebar = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  z-index: 3;
+  transition: all 0.6s ease-in-out;
+
+  @media (max-width: 1024px) {
+    width: ${(props) => (props.expand ? 270 : 100)}px;
+  }
 `;
 
 const Top = styled.div``;
+
+const Hamburger = styled.button`
+  position: absolute;
+  top: 25px;
+  left: 38px;
+  display: none;
+  transition: all 0.6s ease-in-out;
+
+  @media (max-width: 1024px) {
+    display: block;
+    visibility: ${(props) => (props.active ? "hidden" : "visible")};
+    opacity: ${(props) => (props.active ? 0 : 1)};
+  }
+`;
 
 const Item = styled.div`
   padding: 10px 0 10px 56px;
   background: ${(props) =>
     props.selected ? "rgba(255, 255, 255, 0.05)" : "transparent"};
+
+  @media (max-width: 1024px) {
+    padding: ${(props) => (props.expand ? null : "10px 0")};
+    display: ${(props) => (props.expand ? "block" : "grid")};
+    place-items: center;
+  }
 `;
 
 const Content = styled.div`
@@ -115,9 +166,14 @@ const Content = styled.div`
 const Icon = styled.img``;
 
 const Title = styled.h6`
+  white-space: nowrap;
   font-size: 20px;
   font-weight: 500;
   color: ${(props) => (props.selected ? "#f9f9f9" : "#848484")};
+
+  @media (max-width: 1024px) {
+    display: ${(props) => (props.expand ? "block" : "none")};
+  }
 `;
 
 const Bottom = styled.div``;

@@ -10,6 +10,8 @@ const initialState = {
     type: "",
     category: "",
   },
+  deleteCategoryBox: false,
+  deleteCategory: "",
 };
 
 const categorySlice = createSlice({
@@ -32,6 +34,15 @@ const categorySlice = createSlice({
       state.categoryCache.type = action.payload.type;
       state.categoryCache.category = action.payload.category;
     },
+    activateDeleteCategoryBox: (state) => {
+      state.deleteCategoryBox = true;
+    },
+    deactivateDeleteCategoryBox: (state) => {
+      state.deleteCategoryBox = false;
+    },
+    setDeleteCategory: (state, action) => {
+      state.deleteCategory = action.payload.id;
+    },
   },
 });
 
@@ -40,6 +51,9 @@ export const {
   deactivateCategoryForm,
   setCategories,
   setCategoryCache,
+  activateDeleteCategoryBox,
+  deactivateDeleteCategoryBox,
+  setDeleteCategory,
 } = categorySlice.actions;
 
 export const selectCategoryForm = (state) => state.category.categoryForm;
@@ -49,5 +63,8 @@ export const selectIncomeCategories = (state) =>
 export const selectExpenseCategories = (state) =>
   state.category.expenseCategories;
 export const selectCategoryCache = (state) => state.category.categoryCache;
+export const selectDeleteCategoryBox = (state) =>
+  state.category.deleteCategoryBox;
+export const selectDeleteCategory = (state) => state.category.deleteCategory;
 
 export default categorySlice.reducer;

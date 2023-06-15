@@ -30,6 +30,9 @@ function Transactions() {
     const expense = transactions.filter(
       (transaction) => transaction.type === "expense"
     );
+    const dates = transactions.map(
+      (transaction) => new Date(transaction.date.seconds * 1000)
+    );
 
     const sortArray = (value) => {
       let data =
@@ -40,7 +43,7 @@ function Transactions() {
     sortArray(variable);
   }, [transactions, variable]);
 
-  const sortOptions = ["All", "income", "expense"];
+  const sortOptions = ["all", "income", "expense"];
 
   return (
     <Container>
@@ -51,14 +54,14 @@ function Transactions() {
             <SortBy>Sortby</SortBy>
             <Select onClick={() => setSortDropdown(!sortDropdown)}>
               <CurrentOption>
-                {variable === "" ? "All" : variable}
+                {variable === "" ? "all" : variable}
               </CurrentOption>
               <DropDown src="/images/down-small.svg" />
               <Options style={sortDropdown ? { display: "block" } : null}>
                 {sortOptions.map((value, index) => (
                   <Option
                     onClick={() => {
-                      setVariable(value === "All" ? "" : value);
+                      setVariable(value === "all" ? "" : value);
                       setSortDropdown(!sortDropdown);
                     }}
                     key={index}
@@ -90,6 +93,7 @@ function Transactions() {
           transactions={transactions}
           income={income}
           expenses={expenses}
+          display={false}
         />
       </Grid>
     </Container>
@@ -175,6 +179,10 @@ const Grid = styled.div`
   display: grid;
   grid-gap: 32px;
   grid-template-columns: repeat(3, 1fr);
+
+  @media (max-width: 1280px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const Scroll = styled.div`

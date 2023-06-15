@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { selectCategories } from "../../redux/features/categories/categorySlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  activateDeleteCategoryBox,
+  selectCategories,
+  setDeleteCategory,
+} from "../../redux/features/categories/categorySlice";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { TabTitle } from "../utilities/titleFunction";
@@ -14,6 +18,7 @@ function Categories() {
   const [sortDropdown, setSortDropdown] = useState(false);
 
   const categories = useSelector(selectCategories);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const income = categories.filter((category) => category.type === "income");
@@ -30,7 +35,7 @@ function Categories() {
     sortArray(variable);
   }, [categories, variable]);
 
-  const sortOptions = ["All", "income", "expense"];
+  const sortOptions = ["all", "income", "expense"];
 
   return (
     <Container>
@@ -41,14 +46,14 @@ function Categories() {
             <SortBy>Sortby</SortBy>
             <Select onClick={() => setSortDropdown(!sortDropdown)}>
               <CurrentOption>
-                {variable === "" ? "All" : variable}
+                {variable === "" ? "all" : variable}
               </CurrentOption>
               <DropDown src="/images/down-small.svg" />
               <Options style={sortDropdown ? { display: "block" } : null}>
                 {sortOptions.map((value, index) => (
                   <Option
                     onClick={() => {
-                      setVariable(value === "All" ? "" : value);
+                      setVariable(value === "all" ? "" : value);
                       setSortDropdown(!sortDropdown);
                     }}
                     key={index}
@@ -82,6 +87,14 @@ function Categories() {
                     />
                   </Enter>
                 </Link>
+                <Delete
+                  onClick={() => {
+                    dispatch(activateDeleteCategoryBox());
+                    dispatch(setDeleteCategory({ id: category.id }));
+                  }}
+                >
+                  <Icon src="/images/delete.svg" />
+                </Delete>
               </Category>
             ))}
             <Category
@@ -176,9 +189,7 @@ const Value = styled.h5`
   text-transform: capitalize;
 `;
 
-const ListArea = styled.div`
-  width: 50%;
-`;
+const ListArea = styled.div``;
 
 const Scroll = styled.div`
   position: relative;
@@ -198,12 +209,19 @@ const Grid = styled.div`
 `;
 
 const Category = styled.div`
+  width: 50%;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px 40px;
   background: #202020;
-  border-radius: 12px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+
+  @media (max-width: 1280px) {
+    width: calc(100% - 70px);
+  }
 `;
 
 const Content = styled.div``;
@@ -235,6 +253,19 @@ const Enter = styled.div`
 
 const Icon = styled.img`
   display: block;
+`;
+
+const Delete = styled.div`
+  height: 100%;
+  width: 70px;
+  position: absolute;
+  left: 100%;
+  display: grid;
+  place-items: center;
+  background: #222;
+  border-top-right-radius: 12px;
+  border-bottom-right-radius: 12px;
+  cursor: pointer;
 `;
 
 const Bottom = styled.div`

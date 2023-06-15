@@ -1,23 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  navbar: true,
+  navbar: false,
 };
 
 const navbarSlice = createSlice({
   name: "navbar",
   initialState,
   reducers: {
-    activateNavbar: (state) => {
+    expandNavbar: (state) => {
       state.navbar = true;
     },
-    deactivateNavbar: (state) => {
+    minimizeNavbar: (state) => {
       state.navbar = false;
     },
   },
 });
 
-export const { activateNavbar, deactivateNavbar } = navbarSlice.actions;
+export const { expandNavbar, minimizeNavbar } = navbarSlice.actions;
 
 export const selectNavbar = (state) => state.navbar.navbar;
 

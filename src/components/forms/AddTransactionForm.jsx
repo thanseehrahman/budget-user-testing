@@ -15,6 +15,8 @@ import {
 } from "../../redux/features/transactions/transactionSlice";
 import AddButtonForm from "../buttons/AddButtonForm";
 import CloseButton from "../buttons/CloseButton";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function AddTransactionForm() {
   const transactionCache = useSelector(selectTransactionCache);
@@ -23,6 +25,7 @@ function AddTransactionForm() {
   const [categoryDropdown, setCategoryDropdown] = useState(false);
   const [title, setTitle] = useState(transactionCache.title);
   const [amount, setAmount] = useState(transactionCache.amount);
+  const [date, setDate] = useState(transactionCache.date);
   const [type, setType] = useState(
     transactionCache.type === "" ? "expense" : transactionCache.type
   );
@@ -45,9 +48,10 @@ function AddTransactionForm() {
         type: type,
         categoryID: categoryID,
         categoryName: categoryName,
+        date: date,
       })
     );
-  }, [title, amount, type, categoryID, categoryName, dispatch]);
+  }, [title, amount, type, categoryID, categoryName, date, dispatch]);
 
   const addTransaction = async (e) => {
     e.preventDefault();
@@ -56,8 +60,6 @@ function AddTransactionForm() {
       alert("Please enter the title");
     } else if (amount === "") {
       alert("Please enter the amount");
-    } else if (categoryName === "") {
-      alert("Please select the category");
     } else {
       await addDoc(collection(db, "transactions"), {
         title: title,
@@ -66,6 +68,7 @@ function AddTransactionForm() {
         categoryID: categoryID,
         categoryName: categoryName,
         time: new Date(),
+        date: date,
       });
 
       setTitle("");
@@ -82,9 +85,28 @@ function AddTransactionForm() {
     }
   };
 
+  const handleClear = () => {
+    setTitle("");
+    setAmount("");
+    setCategoryName("");
+  };
+
   return (
     <Container>
-      <Heading>Add Transaction</Heading>
+      <Top>
+        <Heading>Add Transaction</Heading>
+        <Clear
+          onClick={handleClear}
+          style={{
+            display:
+              title !== "" || amount !== "" || categoryName !== ""
+                ? "block"
+                : "none",
+          }}
+        >
+          <Text>Clear</Text>
+        </Clear>
+      </Top>
       <Bar></Bar>
       <Form onSubmit={addTransaction}>
         <Title>
@@ -95,15 +117,21 @@ function AddTransactionForm() {
             placeholder="Transaction title"
           />
         </Title>
-        <Amount>
-          <Label>Amount</Label>
-          <Input
-            onChange={(e) => setAmount(e.target.value)}
-            onKeyPress={handleAmount}
-            value={amount}
-            placeholder="0000"
-          />
-        </Amount>
+        <PickArea>
+          <Amount>
+            <Label>Amount</Label>
+            <Input
+              onChange={(e) => setAmount(e.target.value)}
+              onKeyPress={handleAmount}
+              value={amount}
+              placeholder="0000"
+            />
+          </Amount>
+          <DateTime>
+            <Label>Date</Label>
+            <DatePicker selected={date} onChange={(e) => setDate(e)} />
+          </DateTime>
+        </PickArea>
         <SelectArea>
           <Type>
             <Label>Type</Label>
@@ -121,6 +149,7 @@ function AddTransactionForm() {
                         setType(value);
                         setTypeDropdown(!typeDropdown);
                         setCategoryName("");
+                        setCategoryID("");
                       }}
                     >
                       {value}
@@ -139,18 +168,8 @@ function AddTransactionForm() {
               </CurrentOption>
               <DropDown src="/images/down.svg" />
               <Options style={categoryDropdown ? { display: "block" } : null}>
-                {type === "income" ? (
-                  incomeCategories.length === 0 ? (
-                    <Option
-                      onClick={() => {
-                        dispatch(activateCategoryForm());
-                        dispatch(deactivateTransactionForm());
-                      }}
-                    >
-                      <Value>Add Category+</Value>
-                    </Option>
-                  ) : (
-                    incomeCategories.map((category, index) => (
+                {type === "income"
+                  ? incomeCategories.map((category, index) => (
                       <Option
                         key={index}
                         onClick={() => setCategoryDropdown(!categoryDropdown)}
@@ -163,48 +182,47 @@ function AddTransactionForm() {
                         >
                           {category.title}
                         </Value>
-                        <Border
-                          style={
-                            incomeCategories.length - 1 === index
-                              ? { display: "none" }
-                              : null
-                          }
-                        />
+                        <Border />
                       </Option>
                     ))
-                  )
-                ) : expenseCategories.length === 0 ? (
-                  <Option
-                    onClick={() => {
-                      dispatch(activateCategoryForm());
-                      dispatch(deactivateTransactionForm());
-                    }}
-                  >
-                    <Value>Add Category+</Value>
-                  </Option>
-                ) : (
-                  expenseCategories.map((category, index) => (
-                    <Option
-                      key={index}
-                      onClick={() => setCategoryDropdown(!categoryDropdown)}
-                    >
-                      <Value
-                        onClick={() => {
-                          setCategoryID(category.id);
-                          setCategoryName(category.title);
-                        }}
+                  : expenseCategories.map((category, index) => (
+                      <Option
+                        key={index}
+                        onClick={() => setCategoryDropdown(!categoryDropdown)}
                       >
-                        {category.title}
-                      </Value>
-                      <Border />
-                    </Option>
-                  ))
-                )}
+                        <Value
+                          onClick={() => {
+                            setCategoryID(category.id);
+                            setCategoryName(category.title);
+                          }}
+                        >
+                          {category.title}
+                        </Value>
+                        <Border />
+                      </Option>
+                    ))}
+                <Option
+                  onClick={() => {
+                    dispatch(activateCategoryForm());
+                    dispatch(deactivateTransactionForm());
+                  }}
+                >
+                  <Value>Add Category+</Value>
+                </Option>
               </Options>
             </Select>
           </Category>
         </SelectArea>
-        <Submit type="submit">Add Transaction</Submit>
+        <Submit
+          type="submit"
+          style={
+            title !== "" && amount !== ""
+              ? { background: "#4c7dfc", color: "#f9f9f9", cursor: "pointer" }
+              : { background: "#2b2b2b", color: "#848484", cursor: "auto" }
+          }
+        >
+          Add Transaction
+        </Submit>
         <Buttons>
           <CloseButton />
           <AddButtonForm add="category" />
@@ -221,10 +239,27 @@ const Container = styled.div`
   border-radius: 20px;
 `;
 
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+`;
+
 const Heading = styled.h3`
   font-size: 28px;
   font-weight: 600;
-  margin-bottom: 30px;
+`;
+
+const Clear = styled.button`
+  padding: 6px 20px;
+  background: #c33939;
+  border-radius: 8px;
+`;
+
+const Text = styled.h4`
+  font-size: 20px;
+  font-weight: 500;
 `;
 
 const Bar = styled.div`
@@ -256,7 +291,18 @@ const Input = styled.input`
   font-weight: 500;
 `;
 
-const Amount = styled(Title)``;
+const PickArea = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+`;
+
+const Amount = styled(Title)`
+  margin-bottom: 0;
+`;
+
+const DateTime = styled(Amount)``;
 
 const SelectArea = styled.div`
   display: flex;
@@ -336,11 +382,9 @@ const Submit = styled.button`
   margin-bottom: 30px;
   width: 100%;
   padding: 8px;
-  background: #4c7dfc;
   border-radius: 8px;
   font-size: 20px;
   font-weight: 500;
-  color: #f9f9f9;
 `;
 
 export default AddTransactionForm;

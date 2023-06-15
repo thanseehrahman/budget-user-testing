@@ -64,9 +64,24 @@ function AddCategoryForm() {
     }
   };
 
+  const handleClear = () => {
+    setTitle("");
+    setCategory("");
+  };
+
   return (
     <Container>
-      <Heading>Add Category</Heading>
+      <Top>
+        <Heading>Add Category</Heading>
+        <Clear
+          onClick={handleClear}
+          style={{
+            display: title !== "" || category !== "" ? "block" : "none",
+          }}
+        >
+          <Text>Clear</Text>
+        </Clear>
+      </Top>
       <Bar></Bar>
       <Form onSubmit={addCategory}>
         <Title>
@@ -171,7 +186,16 @@ function AddCategoryForm() {
             info
           </Link>
         </Note>
-        <Submit type="submit">Add Category</Submit>
+        <Submit
+          type="submit"
+          style={
+            title !== "" && category
+              ? { background: "#4c7dfc", color: "#f9f9f9", cursor: "pointer" }
+              : { background: "#2b2b2b", color: "#848484", cursor: "auto" }
+          }
+        >
+          Add Category
+        </Submit>
         <Buttons>
           <CloseButton />
           <AddButtonForm add="transaction" />
@@ -188,10 +212,27 @@ const Container = styled.div`
   border-radius: 20px;
 `;
 
+const Top = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+`;
+
 const Heading = styled.h3`
   font-size: 28px;
   font-weight: 600;
-  margin-bottom: 30px;
+`;
+
+const Clear = styled.button`
+  padding: 6px 20px;
+  background: #c33939;
+  border-radius: 8px;
+`;
+
+const Text = styled.h4`
+  font-size: 20px;
+  font-weight: 500;
 `;
 
 const Bar = styled.div`
@@ -304,11 +345,9 @@ const Submit = styled.button`
   margin-bottom: 30px;
   width: 100%;
   padding: 8px;
-  background: #4c7dfc;
   border-radius: 8px;
   font-size: 20px;
   font-weight: 500;
-  color: #f9f9f9;
 `;
 
 export default AddCategoryForm;

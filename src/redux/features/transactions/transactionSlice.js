@@ -11,6 +11,7 @@ const initialState = {
     type: "",
     categoryID: "",
     categoryName: "",
+    date: new Date(),
   },
   editTransactionForm: false,
   editTransactionCache: {
@@ -20,9 +21,10 @@ const initialState = {
     type: "",
     categoryID: "",
     categoryName: "",
+    date: "",
   },
   deleteTransactionBox: false,
-  deleteTransactionID: "",
+  deleteTransaction: "",
 };
 
 const transactionSlice = createSlice({
@@ -46,6 +48,7 @@ const transactionSlice = createSlice({
       state.transactionCache.type = action.payload.type;
       state.transactionCache.categoryID = action.payload.categoryID;
       state.transactionCache.categoryName = action.payload.categoryName;
+      state.transactionCache.date = action.payload.date;
     },
     activateEditTransactionForm: (state) => {
       state.editTransactionForm = true;
@@ -60,6 +63,7 @@ const transactionSlice = createSlice({
       state.editTransactionCache.type = action.payload.type;
       state.editTransactionCache.categoryID = action.payload.categoryID;
       state.editTransactionCache.categoryName = action.payload.categoryName;
+      state.editTransactionCache.date = action.payload.date;
     },
     activateDeleteTransactionBox: (state) => {
       state.deleteTransactionBox = true;

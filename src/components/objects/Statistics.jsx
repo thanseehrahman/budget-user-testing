@@ -8,7 +8,7 @@ function Statistics() {
       subheading="Statistics"
       type="large"
       colspan="1/3"
-      rowspan="3"
+      rowspan="2"
       link="statistics"
     >
       <Title>Coming soon</Title>

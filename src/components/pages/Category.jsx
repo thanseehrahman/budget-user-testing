@@ -49,7 +49,7 @@ function Category() {
           </SmallGrid>
           <Bottom />
         </Scroll>
-        <Categories categories={categories} rowspan="" />
+        <Categories categories={categories} rowspan="" display={false}/>
       </Grid>
     </Container>
   );
@@ -69,6 +69,10 @@ const Grid = styled.div`
   display: grid;
   grid-gap: 32px;
   grid-template-columns: repeat(3, 1fr);
+
+  @media (max-width: 1280px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 const Scroll = styled.div`

@@ -10,9 +10,15 @@ function GridElement({
   subheading,
   color,
   link,
+  display,
 }) {
   return (
-    <Container type={type} colspan={colspan} rowspan={rowspan}>
+    <Container
+      type={type}
+      colspan={colspan}
+      rowspan={rowspan}
+      display={display}
+    >
       {type === "large" ? (
         <Link to={"/" + link}>
           <SubHeading type={type} color={color}>
@@ -37,10 +43,17 @@ const Container = styled.div`
   background: #202020;
   border-radius: 20px;
   z-index: 2;
+
+  @media (max-width: 1280px) {
+    grid-column: auto;
+    grid-row: auto;
+    display: ${(props) => (props.display ? "block" : "none")};
+  }
 `;
 
 Container.defaultProps = {
   type: "large",
+  display: "block",
 };
 
 const SubHeading = styled.h4`

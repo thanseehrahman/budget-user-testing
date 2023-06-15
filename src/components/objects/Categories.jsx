@@ -5,13 +5,14 @@ import styled from "styled-components";
 import Dialogue from "./Dialogue";
 import { Link } from "react-router-dom";
 
-function Categories({ categories, count, rowspan }) {
+function Categories({ categories, count, rowspan, display }) {
   return (
     <GridElement
       subheading="Categories"
       type="large"
       rowspan={rowspan}
       link="categories"
+      display={display}
     >
       <AddButton add="category" />
       <Count>{count}</Count>
@@ -53,7 +54,11 @@ const Label = styled.p`
   margin-bottom: 20px;
 `;
 
-const List = styled.ul``;
+const List = styled.ul`
+  @media (max-width: 1280px) {
+    display: none;
+  }
+`;
 
 const Item = styled.li`
   display: flex;
