@@ -4,9 +4,9 @@ import AddButton from "../buttons/AddButton";
 import Dialogue from "./Dialogue";
 import styled from "styled-components";
 
-function Transactions({ transactions }) {
+function Transactions({ transactions, animationDelay }) {
   return (
-    <GridElement subheading="Transactions" type="large" link="transactions">
+    <GridElement subheading="Transactions" type="large" link="transactions" animationDelay={animationDelay}>
       <AddButton add="transaction" />
       {transactions.length === 0 ? (
         <Dialogue type="transaction" margin="20"/>

@@ -21,6 +21,11 @@ const Heading = styled.h3`
   font-size: 48px;
   color: #f9f9f9;
   margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    font-size: 34px;
+    margin-bottom: 42px;
+  }
 `;
 
 const Message = styled.p`

@@ -206,7 +206,7 @@ function AddCategoryForm() {
 }
 
 const Container = styled.div`
-  width: 554px;
+  width: 540px;
   padding: 40px;
   background: #202020;
   border-radius: 20px;

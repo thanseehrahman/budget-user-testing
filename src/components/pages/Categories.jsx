@@ -71,7 +71,7 @@ function Categories() {
         <Scroll>
           <Grid>
             {array.map((category, index) => (
-              <Category key={index}>
+              <Category key={index} animationDelay={index / 7 + 0.2}>
                 <Content>
                   <Title>{category.title}</Title>
                   <CategoryName>{category.category}</CategoryName>
@@ -79,6 +79,7 @@ function Categories() {
                 <Link to={"/category/" + category.id}>
                   <Enter>
                     <Icon
+                      type="enter"
                       src={
                         category.type === "income"
                           ? "/images/right-green.svg"
@@ -121,11 +122,25 @@ const Top = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 42px;
+  }
+
+  @media (max-width: 540px) {
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+  }
 `;
 
 const Heading = styled.h3`
   font-size: 48px;
   color: #f9f9f9;
+
+  @media (max-width: 768px) {
+    font-size: 34px;
+  }
 `;
 
 const Right = styled.div`
@@ -142,6 +157,10 @@ const SortBy = styled.h6`
   padding: 10px 20px;
   font-size: 16px;
   font-weight: 500;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const Select = styled.div`
@@ -222,6 +241,27 @@ const Category = styled.div`
   @media (max-width: 1280px) {
     width: calc(100% - 70px);
   }
+
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+
+  animation-name: fade-up;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+  animation-delay: ${(props) => props.animationDelay}s;
+  animation-fill-mode: both;
+
+  @keyframes fade-up {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
 `;
 
 const Content = styled.div``;
@@ -231,6 +271,10 @@ const Title = styled.h5`
   font-weight: 600;
   color: #f9f9f9;
   margin-bottom: 10px;
+
+  @media (max-width: 768px) {
+    font-size: 26px;
+  }
 `;
 
 const CategoryName = styled.h5`
@@ -249,10 +293,19 @@ const Enter = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    height: 60px;
+    width: 60px;
+  }
 `;
 
 const Icon = styled.img`
   display: block;
+
+  @media (max-width: 768px) {
+    width: ${(props) => (props.type === "enter" ? 46 : null)}px;
+  }
 `;
 
 const Delete = styled.div`
@@ -274,6 +327,10 @@ const Bottom = styled.div`
   height: 120px;
   width: 100%;
   background: linear-gradient(180deg, rgba(25, 25, 25, 0) 0%, #191919 100%);
+
+  @media (max-width: 768px) {
+    bottom: 42px;
+  }
 `;
 
 export default Categories;

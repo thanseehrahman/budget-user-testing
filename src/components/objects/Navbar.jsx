@@ -9,6 +9,7 @@ import {
   minimizeNavbar,
   selectNavbar,
 } from "../../redux/features/navbar/navbarSlice";
+import AddButtonSquare from "../buttons/AddButtonSquare";
 
 function Navbar() {
   const location = useLocation();
@@ -60,53 +61,65 @@ function Navbar() {
   ];
 
   return (
-    <Sidebar expand={navbar}>
-      <Hamburger active={navbar} onClick={() => dispatch(expandNavbar())}>
-        <Icon src="/images/hamburger.svg" />
-      </Hamburger>
-      <Top>
-        {links.map((link, index) => (
-          <Link
-            key={index}
-            to={link.path}
-            onClick={() => dispatch(minimizeNavbar())}
+    <>
+      <Sidebar expand={navbar}>
+        <Hamburger active={navbar} onClick={() => dispatch(expandNavbar())}>
+          <Icon src="/images/hamburger.svg" />
+        </Hamburger>
+        <Top>
+          {links.map((link, index) => (
+            <Link
+              key={index}
+              to={link.path}
+              onClick={() => dispatch(minimizeNavbar())}
+            >
+              <Item selected={link.path === path} expand={navbar}>
+                <Content>
+                  <Icon
+                    src={link.path === path ? link.img.active : link.img.img}
+                    type="link"
+                  />
+                  <Title selected={link.path === path} expand={navbar}>
+                    {link.title}
+                  </Title>
+                </Content>
+              </Item>
+            </Link>
+          ))}
+        </Top>
+        <Bottom>
+          <NewTransaction
+            onClick={() => {
+              dispatch(activateTransactionForm());
+              dispatch(minimizeNavbar());
+            }}
           >
-            <Item selected={link.path === path} expand={navbar}>
-              <Content>
-                <Icon
-                  src={link.path === path ? link.img.active : link.img.img}
-                />
-                <Title selected={link.path === path} expand={navbar}>
-                  {link.title}
-                </Title>
-              </Content>
-            </Item>
-          </Link>
-        ))}
-      </Top>
-      <Bottom>
-        <NewTransaction
-          onClick={() => {
-            dispatch(activateTransactionForm());
-            dispatch(minimizeNavbar());
-          }}
-        >
-          <Title expand={navbar}>
-            New Transaction <Span>+</Span>
-          </Title>
-        </NewTransaction>
-        <NewCategory
-          onClick={() => {
-            dispatch(activateCategoryForm());
-            dispatch(minimizeNavbar());
-          }}
-        >
-          <Title expand={navbar}>
-            New Category <Span className="category">+</Span>
-          </Title>
-        </NewCategory>
-      </Bottom>
-    </Sidebar>
+            <Title expand={navbar}>
+              New Transaction <Span>+</Span>
+            </Title>
+          </NewTransaction>
+          <NewCategory
+            onClick={() => {
+              dispatch(activateCategoryForm());
+              dispatch(minimizeNavbar());
+            }}
+          >
+            <Title expand={navbar}>
+              New Category <Span className="category">+</Span>
+            </Title>
+          </NewCategory>
+        </Bottom>
+        <Buttons active={navbar}>
+          <AddButtonSquare add="transaction" />
+          <AddButtonSquare add="category" />
+        </Buttons>
+      </Sidebar>
+      <Topbar active={navbar}>
+        <TopHamburger onClick={() => dispatch(expandNavbar())}>
+          <Icon src="/images/hamburger.svg" />
+        </TopHamburger>
+      </Topbar>
+    </>
   );
 }
 
@@ -127,6 +140,15 @@ const Sidebar = styled.div`
   @media (max-width: 1024px) {
     width: ${(props) => (props.expand ? 270 : 100)}px;
   }
+
+  @media (max-width: 768px) {
+    padding: 60px 0px 42px;
+  }
+
+  @media (max-width: 480px) {
+    display: ${(props) => (props.expand ? "flex" : "none")};
+    padding: 42px 0;
+  }
 `;
 
 const Top = styled.div``;
@@ -137,6 +159,7 @@ const Hamburger = styled.button`
   left: 38px;
   display: none;
   transition: all 0.6s ease-in-out;
+  cursor: pointer;
 
   @media (max-width: 1024px) {
     display: block;
@@ -163,7 +186,11 @@ const Content = styled.div`
   gap: 10px;
 `;
 
-const Icon = styled.img``;
+const Icon = styled.img`
+  @media (max-width: 480px) {
+    display: ${(props) => (props.type === "link" ? "none" : null)};
+  }
+`;
 
 const Title = styled.h6`
   white-space: nowrap;
@@ -192,5 +219,37 @@ const Span = styled.span`
 `;
 
 const NewCategory = styled(NewTransaction)``;
+
+const Buttons = styled.div`
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+
+  @media (max-width: 1024px) {
+    display: ${(props) => (props.active ? "none" : "flex")};
+  }
+`;
+
+const Topbar = styled.div`
+  height: 60px;
+  width: 100%;
+  display: none;
+  background: #202020;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  border-bottom: 1px solid #2b2b2b;
+  padding: 0 18px;
+
+  @media (max-width: 480px) {
+    display: ${(props) => (props.active ? "none" : "flex")};
+    align-items: center;
+    justify-content: space-between;
+  }
+`;
+
+const TopHamburger = styled.button``;
 
 export default Navbar;

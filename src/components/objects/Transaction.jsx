@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -8,29 +8,12 @@ import {
   setDeleteTransaction,
   setEditTransactionCache,
 } from "../../redux/features/transactions/transactionSlice";
-import { selectCategories } from "../../redux/features/categories/categorySlice";
-import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase";
 
-function Transaction({ transaction }) {
-  const categories = useSelector(selectCategories);
+function Transaction({ transaction, index }) {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const matchCategory = categories.find(
-      (category) => category.id === transaction.categoryID
-    );
-
-    if (!matchCategory) {
-      updateDoc(doc(db, "transactions", transaction.id), {
-        categoryName: "",
-        categoryID: "",
-      });
-    }
-  }, [transaction, categories]);
-
   return (
-    <Item>
+    <Item animationDelay={index / 7 + 0.2}>
       <Name>
         <Title>{transaction.title}</Title>
       </Name>
@@ -94,10 +77,44 @@ const Item = styled.div`
   padding: 24px 20px;
   background: #202020;
   border-radius: 12px;
+  align-items: center;
+
+  @media (max-width: 640px) {
+    grid-gap: 20px;
+  }
+
+  @media (max-width: 540px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  animation-name: fade-up;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+  animation-delay: ${(props) => props.animationDelay}s;
+  animation-fill-mode: both;
+
+  @keyframes fade-up {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
+  }
 `;
 
 const Name = styled.div`
   grid-column: span 4;
+
+  @media (max-width: 640px) {
+    grid-column: span 8;
+  }
+
+  @media (max-width: 540px) {
+    grid-column: auto;
+  }
 `;
 
 const Title = styled.h5`
@@ -130,6 +147,14 @@ const Title = styled.h5`
   &.amount.expense {
     color: #c33939;
   }
+
+  @media (max-width: 768px) {
+    font-size: 18px;
+  }
+
+  @media (max-width: 640px) {
+    font-size: 20px;
+  }
 `;
 
 const Category = styled.div`
@@ -139,14 +164,40 @@ const Category = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 0 5px;
+
+  @media (max-width: 640px) {
+    grid-column: span 10;
+    grid-row: 2;
+    padding: 0;
+  }
+
+  @media (max-width: 540px) {
+    display: none;
+  }
 `;
 
 const Type = styled(Category)`
   grid-column: span 3;
+
+  @media (max-width: 640px) {
+    display: none;
+  }
 `;
 
 const Amount = styled(Category)`
   grid-column: span 3;
+
+  @media (max-width: 640px) {
+    grid-row: 1;
+    grid-column: 9 / span 8;
+    text-align: right;
+  }
+
+  @media (max-width: 540px) {
+    display: block;
+    grid-column: auto;
+    grid-row: auto;
+  }
 `;
 
 const Edit = styled.div`
@@ -158,10 +209,23 @@ const Edit = styled.div`
   &:hover {
     transform: translateY(-4px);
   }
+
+  @media (max-width: 640px) {
+    grid-column: span 4;
+    justify-content: flex-end;
+  }
+
+  @media (max-width: 540px) {
+    display: none;
+  }
 `;
 
 const Icon = styled.img``;
 
-const Delete = styled(Edit)``;
+const Delete = styled(Edit)`
+  @media (max-width: 640px) {
+    grid-column: span 2;
+  }
+`;
 
 export default Transaction;

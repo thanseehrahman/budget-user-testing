@@ -32,10 +32,14 @@ function Dashboard() {
     <Container>
       <Top>
         <Heading>Dashboard</Heading>
-        <AddButtonCircle add="transaction" />
+        <AddButtonCircle add="transaction" display={true}/>
       </Top>
       <TopGrid>
-        <GridElement subheading={countArray(transactions)} type="small">
+        <GridElement
+          subheading={countArray(transactions)}
+          type="small"
+          animationDelay={0 / 7 + 0.2}
+        >
           <Label>
             {transactions.length <= 1
               ? "Transaction Added"
@@ -46,6 +50,7 @@ function Dashboard() {
           subheading={countArray(income)}
           type="small"
           color="#4f883b"
+          animationDelay={1 / 7 + 0.2}
         >
           <Label>
             {transactions.length <= 1 ? "Income Added" : "Income Added"}
@@ -55,6 +60,7 @@ function Dashboard() {
           subheading={countArray(transactions)}
           type="small"
           color="#c33939"
+          animationDelay={2 / 7 + 0.2}
         >
           <Label>
             {transactions.length <= 1 ? "Expense Added" : "Expenses Added"}
@@ -66,13 +72,18 @@ function Dashboard() {
           transactions={transactions}
           income={income}
           expenses={expenses}
+          animationDelay={3 / 7 + 0.2}
         />
-        <Transactions transactions={transactions} />
-        <Statistics />
+        <Transactions
+          transactions={transactions}
+          animationDelay={4 / 7 + 0.2}
+        />
+        <Statistics animationDelay={5 / 7 + 0.2} />
         <Categories
           categories={categories}
           count={countArray(categories)}
           rowspan="1/3"
+          animationDelay={6 / 7 + 0.2}
         />
       </Grid>
     </Container>
@@ -86,11 +97,19 @@ const Top = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 42px;
+  }
 `;
 
 const Heading = styled.h3`
   font-size: 48px;
   color: #f9f9f9;
+
+  @media (max-width: 768px) {
+    font-size: 34px;
+  }
 `;
 
 const TopGrid = styled.div`
@@ -102,6 +121,16 @@ const TopGrid = styled.div`
   @media (max-width: 1024px) {
     grid-template-columns: repeat(1, 1fr);
   }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 24px;
+  }
+
+  @media (max-width: 540px) {
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 24px;
+  }
 `;
 
 const Grid = styled.div`
@@ -111,6 +140,10 @@ const Grid = styled.div`
 
   @media (max-width: 1280px) {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(1, 1fr);
   }
 `;
 

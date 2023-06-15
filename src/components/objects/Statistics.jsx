@@ -2,7 +2,7 @@ import React from "react";
 import GridElement from "./GridElement";
 import styled from "styled-components";
 
-function Statistics() {
+function Statistics({ animationDelay }) {
   return (
     <GridElement
       subheading="Statistics"
@@ -10,6 +10,7 @@ function Statistics() {
       colspan="1/3"
       rowspan="2"
       link="statistics"
+      animationDelay={animationDelay}
     >
       <Title>Coming soon</Title>
     </GridElement>

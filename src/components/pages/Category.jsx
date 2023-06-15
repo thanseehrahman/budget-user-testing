@@ -42,14 +42,18 @@ function Category() {
               transactions
                 .filter((transaction) => transaction.categoryID === id)
                 .map((transaction, index) => (
-                  <Transaction transaction={transaction} key={index} />
+                  <Transaction
+                    transaction={transaction}
+                    key={index}
+                    index={index}
+                  />
                 ))
             )}
             <EmptyTransaction />
           </SmallGrid>
           <Bottom />
         </Scroll>
-        <Categories categories={categories} rowspan="" display={false}/>
+        <Categories categories={categories} rowspan="" display={false} />
       </Grid>
     </Container>
   );
@@ -63,6 +67,11 @@ const Heading = styled.h3`
   font-size: 48px;
   color: #f9f9f9;
   margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    font-size: 34px;
+    margin-bottom: 42px;
+  }
 `;
 
 const Grid = styled.div`

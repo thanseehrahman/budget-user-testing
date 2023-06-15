@@ -87,11 +87,19 @@ const Top = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 42px;
+  }
 `;
 
 const Heading = styled.h3`
   font-size: 48px;
   color: #f9f9f9;
+
+  @media (max-width: 768px) {
+    font-size: 34px;
+  }
 `;
 
 const Direction = styled.p`
@@ -99,6 +107,10 @@ const Direction = styled.p`
   font-weight: 600;
   color: #f9f9f9;
   margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 const Span = styled.span`
@@ -114,6 +126,10 @@ const SubHeading = styled.h4`
   font-weight: 600;
   color: #f9f9f9;
   margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    font-size: 26px;
+  }
 `;
 
 const List = styled.ul``;
@@ -126,6 +142,10 @@ const Title = styled.h5`
   font-size: 28px;
   font-weight: 600;
   margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    font-size: 20px;
+  }
 `;
 
 const Description = styled.p`

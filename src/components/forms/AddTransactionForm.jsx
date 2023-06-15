@@ -60,6 +60,8 @@ function AddTransactionForm() {
       alert("Please enter the title");
     } else if (amount === "") {
       alert("Please enter the amount");
+    } else if (categoryName === "") {
+      alert("Please select or create the category");
     } else {
       await addDoc(collection(db, "transactions"), {
         title: title,
@@ -216,7 +218,7 @@ function AddTransactionForm() {
         <Submit
           type="submit"
           style={
-            title !== "" && amount !== ""
+            title !== "" && amount !== "" && categoryName !== ""
               ? { background: "#4c7dfc", color: "#f9f9f9", cursor: "pointer" }
               : { background: "#2b2b2b", color: "#848484", cursor: "auto" }
           }
@@ -233,7 +235,7 @@ function AddTransactionForm() {
 }
 
 const Container = styled.div`
-  width: 554px;
+  width: 540px;
   padding: 40px;
   background: #202020;
   border-radius: 20px;

@@ -5,7 +5,7 @@ import styled from "styled-components";
 import Dialogue from "./Dialogue";
 import { Link } from "react-router-dom";
 
-function Categories({ categories, count, rowspan, display }) {
+function Categories({ categories, count, rowspan, display, animationDelay }) {
   return (
     <GridElement
       subheading="Categories"
@@ -13,6 +13,7 @@ function Categories({ categories, count, rowspan, display }) {
       rowspan={rowspan}
       link="categories"
       display={display}
+      animationDelay={animationDelay}
     >
       <AddButton add="category" />
       <Count>{count}</Count>
@@ -45,6 +46,10 @@ const Count = styled.h6`
   font-weight: 600;
   color: #f9f9f9;
   margin-bottom: 6px;
+
+  @media (max-width: 768px) {
+    font-size: 24px;
+  }
 `;
 
 const Label = styled.p`

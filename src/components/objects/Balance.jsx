@@ -3,7 +3,7 @@ import GridElement from "./GridElement";
 import styled from "styled-components";
 import Dialogue from "./Dialogue";
 
-function Balance({ transactions, income, expenses, display }) {
+function Balance({ transactions, income, expenses, display, animationDelay }) {
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpense, setTotalExpense] = useState(0);
 
@@ -16,7 +16,7 @@ function Balance({ transactions, income, expenses, display }) {
   }, [income, expenses]);
 
   return (
-    <GridElement subheading="Balance" type="large" link="transactions" display={display}>
+    <GridElement subheading="Balance" type="large" link="transactions" display={display} animationDelay={animationDelay}>
       {transactions.length === 0 ? (
         <Dialogue type="transaction" />
       ) : (

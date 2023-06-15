@@ -4,12 +4,11 @@ import styled from "styled-components";
 import { activateTransactionForm } from "../../redux/features/transactions/transactionSlice";
 import { activateCategoryForm } from "../../redux/features/categories/categorySlice";
 
-function AddButtonCircle({ add, display }) {
+function AddButtonSquare({ add }) {
   const dispatch = useDispatch();
 
   return (
     <Container
-      display={display}
       onClick={() => {
         dispatch(
           add === "transaction"
@@ -29,33 +28,18 @@ function AddButtonCircle({ add, display }) {
 }
 
 const Container = styled.div`
-  height: 60px;
-  width: 60px;
+  height: 40px;
+  width: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
+  border-radius: 6px;
   cursor: pointer;
-  transition: transform 0.2s ease-in-out;
-
-  &:hover {
-    transform: translateY(-4px);
-  }
-
-  @media (max-width: 640px) {
-    display: ${(props) => (props.display ? "flex" : "none")};
-    height: 42px;
-    width: 42px;
-  }
 `;
 
 const Plus = styled.img`
-  width: 40px;
+  width: 20px;
   display: block;
-
-  @media (max-width: 640px) {
-    width: 28px;
-  }
 `;
 
-export default AddButtonCircle;
+export default AddButtonSquare;

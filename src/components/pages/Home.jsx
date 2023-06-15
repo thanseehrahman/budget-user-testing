@@ -135,6 +135,17 @@ const Background = styled.div`
     width: calc(100% - 100px);
     left: 100px;
   }
+
+  @media (max-width: 768px) {
+    padding: 64px 42px 42px;
+  }
+
+  @media (max-width: 480px) {
+    width: 100%;
+    left: 0;
+    top: 60px;
+    padding: 42px;
+  }
 `;
 
 const Freeze = styled.div`

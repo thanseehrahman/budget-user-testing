@@ -82,7 +82,11 @@ function Transactions() {
               <Dialogue type="transaction" />
             ) : (
               array.map((transaction, index) => (
-                <Transaction transaction={transaction} key={index} />
+                <Transaction
+                  transaction={transaction}
+                  key={index}
+                  index={index}
+                />
               ))
             )}
             <EmptyTransaction />
@@ -107,11 +111,25 @@ const Top = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 60px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 42px;
+  }
+
+  @media (max-width: 540px) {
+    flex-direction: column;
+    align-items: start;
+    gap: 20px;
+  }
 `;
 
 const Heading = styled.h3`
   font-size: 48px;
   color: #f9f9f9;
+
+  @media (max-width: 768px) {
+    font-size: 34px;
+  }
 `;
 
 const Right = styled.div`
@@ -128,6 +146,14 @@ const SortBy = styled.h6`
   padding: 10px 20px;
   font-size: 16px;
   font-weight: 500;
+
+  @media (max-width: 768px) {
+    display: none;
+  }
+
+  @media (max-width: 540px) {
+    display: block;
+  }
 `;
 
 const Select = styled.div`
@@ -217,6 +243,10 @@ const Bottom = styled.div`
   height: 120px;
   width: 100%;
   background: linear-gradient(180deg, rgba(25, 25, 25, 0) 0%, #191919 100%);
+
+  @media (max-width: 768px) {
+    bottom: 42px;
+  }
 `;
 
 export default Transactions;

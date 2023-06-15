@@ -11,6 +11,7 @@ function GridElement({
   color,
   link,
   display,
+  animationDelay,
 }) {
   return (
     <Container
@@ -18,6 +19,7 @@ function GridElement({
       colspan={colspan}
       rowspan={rowspan}
       display={display}
+      animationDelay={animationDelay}
     >
       {type === "large" ? (
         <Link to={"/" + link}>
@@ -48,6 +50,31 @@ const Container = styled.div`
     grid-column: auto;
     grid-row: auto;
     display: ${(props) => (props.display ? "block" : "none")};
+    padding: ${(props) => (props.type === "large" ? "40px 40px" : "20px 20px")};
+  }
+
+  @media (max-width: 768px) {
+    padding: ${(props) => (props.type === "large" ? "28px" : "14px")} 28px;
+    display: ${(props) => (props.type === "small" ? "flex" : null)};
+    align-items: center;
+    gap: 10px;
+  }
+
+  animation-name: fade-up;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-in-out;
+  animation-delay: ${(props) => props.animationDelay}s;
+  animation-fill-mode: both;
+
+  @keyframes fade-up {
+    0% {
+      transform: translateY(10px);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0px);
+      opacity: 1;
+    }
   }
 `;
 
@@ -66,6 +93,10 @@ const SubHeading = styled.h4`
   &:hover {
     text-decoration: ${(props) =>
       props.type === "large" ? "underline" : "none"};
+  }
+
+  @media (max-width: 768px) {
+    font-size: 24px;
   }
 `;
 
