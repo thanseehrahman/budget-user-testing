@@ -146,8 +146,7 @@ const Sidebar = styled.div`
   }
 
   @media (max-width: 480px) {
-    display: ${(props) => (props.expand ? "flex" : "none")};
-    padding: 42px 0;
+    transform: translateX(${(props) => (props.expand ? 0 : -270)}px);
   }
 `;
 
@@ -165,6 +164,10 @@ const Hamburger = styled.button`
     display: block;
     visibility: ${(props) => (props.active ? "hidden" : "visible")};
     opacity: ${(props) => (props.active ? 0 : 1)};
+  }
+
+  @media (max-width: 480px) {
+    display: none;
   }
 `;
 
