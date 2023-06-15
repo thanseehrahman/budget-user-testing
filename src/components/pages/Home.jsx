@@ -1,5 +1,5 @@
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Outlet } from "react-router-dom";
 import styled from "styled-components";

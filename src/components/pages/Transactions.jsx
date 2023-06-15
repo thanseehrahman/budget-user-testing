@@ -30,9 +30,9 @@ function Transactions() {
     const expense = transactions.filter(
       (transaction) => transaction.type === "expense"
     );
-    const dates = transactions.map(
-      (transaction) => new Date(transaction.date.seconds * 1000)
-    );
+    // const dates = transactions.map(
+    //   (transaction) => new Date(transaction.date.seconds * 1000)
+    // );
 
     const sortArray = (value) => {
       let data =
