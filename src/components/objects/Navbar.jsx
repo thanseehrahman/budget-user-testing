@@ -147,7 +147,7 @@ const Sidebar = styled.div`
 
   @media (max-width: 480px) {
     transform: translateX(${(props) => (props.expand ? 0 : -270)}px);
-    padding: 42px 0px 32px;
+    padding: 60px 0px 32px;
   }
 `;
 
@@ -250,7 +250,7 @@ const Buttons = styled.div`
 `;
 
 const Topbar = styled.div`
-  height: 40px;
+  height: 60px;
   width: 100%;
   display: none;
   background: #202020;

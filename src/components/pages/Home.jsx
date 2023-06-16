@@ -143,7 +143,7 @@ const Background = styled.div`
   @media (max-width: 480px) {
     width: 100%;
     left: 0;
-    padding: 82px 32px 32px;
+    padding: 102px 32px 32px;
   }
 `;
 
