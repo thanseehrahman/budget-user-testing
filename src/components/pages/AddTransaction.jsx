@@ -23,7 +23,6 @@ const Background = styled.div`
 
   @media (max-width: 540px) {
     padding: 20px;
-    height: calc(100% + 60px)
   }
 `;
 
