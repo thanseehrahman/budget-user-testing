@@ -249,7 +249,7 @@ const Buttons = styled.div`
 `;
 
 const Topbar = styled.div`
-  height: 60px;
+  height: 40px;
   width: 100%;
   display: none;
   background: #202020;

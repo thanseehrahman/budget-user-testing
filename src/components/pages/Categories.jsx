@@ -275,6 +275,10 @@ const Title = styled.h5`
   @media (max-width: 768px) {
     font-size: 26px;
   }
+
+  @media (max-width: 480px) {
+    font-size: 20px;
+  }
 `;
 
 const CategoryName = styled.h5`
@@ -282,6 +286,10 @@ const CategoryName = styled.h5`
   font-size: 20px;
   font-weight: 500;
   color: #848484;
+
+  @media (max-width: 480px) {
+    font-size: 16px;
+  }
 `;
 
 const Enter = styled.div`
@@ -305,6 +313,10 @@ const Icon = styled.img`
 
   @media (max-width: 768px) {
     width: ${(props) => (props.type === "enter" ? 46 : null)}px;
+  }
+
+  @media (max-width: 768px) {
+    width: ${(props) => (props.type === "enter" ? 36 : null)}px;
   }
 `;
 

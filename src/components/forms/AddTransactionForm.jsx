@@ -451,6 +451,7 @@ const Submit = styled.button`
 
   @media (max-width: 540px) {
     font-size: 16px;
+    margin-bottom: 22px;
   }
 `;
 

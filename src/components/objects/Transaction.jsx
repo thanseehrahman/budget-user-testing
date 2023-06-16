@@ -87,6 +87,11 @@ const Item = styled.div`
     grid-template-columns: repeat(2, 1fr);
   }
 
+  
+  @media (max-width: 480px) {
+    padding: 18px;
+  }
+
   animation-name: fade-up;
   animation-duration: 0.4s;
   animation-timing-function: ease-in-out;
