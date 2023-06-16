@@ -147,6 +147,7 @@ const Sidebar = styled.div`
 
   @media (max-width: 480px) {
     transform: translateX(${(props) => (props.expand ? 0 : -270)}px);
+    padding: 42px 0px 32px;
   }
 `;
 
