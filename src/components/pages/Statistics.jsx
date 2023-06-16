@@ -26,6 +26,10 @@ const Heading = styled.h3`
     font-size: 34px;
     margin-bottom: 42px;
   }
+
+  @media (max-width: 480px) {
+    margin-bottom: 32px;
+  }
 `;
 
 const Message = styled.p`

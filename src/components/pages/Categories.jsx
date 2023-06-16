@@ -132,6 +132,10 @@ const Top = styled.div`
     align-items: start;
     gap: 20px;
   }
+
+  @media (max-width: 480px) {
+    margin-bottom: 32px;
+  }
 `;
 
 const Heading = styled.h3`
