@@ -179,7 +179,13 @@ const Item = styled.div`
   @media (max-width: 1024px) {
     padding: ${(props) => (props.expand ? null : "10px 0")};
     display: ${(props) => (props.expand ? "block" : "grid")};
-    place-items: center;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 480px) {
+    justify-content: start;
+    padding: 10px 0 10px 56px;
   }
 `;
 
@@ -203,6 +209,10 @@ const Title = styled.h6`
 
   @media (max-width: 1024px) {
     display: ${(props) => (props.expand ? "block" : "none")};
+  }
+
+  @media (max-width: 480px) {
+    display: block;
   }
 `;
 
@@ -231,6 +241,10 @@ const Buttons = styled.div`
 
   @media (max-width: 1024px) {
     display: ${(props) => (props.active ? "none" : "flex")};
+  }
+
+  @media (max-width: 480px) {
+    display: none;
   }
 `;
 
