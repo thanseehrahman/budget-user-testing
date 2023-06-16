@@ -22,7 +22,8 @@ const Background = styled.div`
   z-index: 4;
 
   @media (max-width: 540px) {
-    padding: 42px;
+    padding: 20px;
+    height: calc(100% + 60px)
   }
 `;
 

@@ -242,7 +242,7 @@ const Container = styled.div`
 
   @media (max-width: 540px) {
     width: 100%;
-    padding: 28px;
+    padding: 20px;
   }
 `;
 
