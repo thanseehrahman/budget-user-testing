@@ -52,6 +52,10 @@ const Label = styled.h5`
   font-size: 20px;
   font-weight: 500;
   color: #f9f9f9;
+
+  @media (max-width: 540px) {
+    font-size: 16px;
+  }
 `;
 
 export default AddButtonForm;

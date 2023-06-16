@@ -239,6 +239,11 @@ const Container = styled.div`
   padding: 40px;
   background: #202020;
   border-radius: 20px;
+
+  @media (max-width: 540px) {
+    width: 100%;
+    padding: 28px;
+  }
 `;
 
 const Top = styled.div`
@@ -246,22 +251,38 @@ const Top = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
+
+  @media (max-width: 540px) {
+    margin-bottom: 22px;
+  }
 `;
 
 const Heading = styled.h3`
   font-size: 28px;
   font-weight: 600;
+
+  @media (max-width: 540px) {
+    font-size: 20px;
+  }
 `;
 
 const Clear = styled.button`
   padding: 6px 20px;
   background: #c33939;
   border-radius: 8px;
+
+  @media (max-width: 540px) {
+    padding: 4px 12px;
+  }
 `;
 
 const Text = styled.h4`
   font-size: 20px;
   font-weight: 500;
+
+  @media (max-width: 540px) {
+    font-size: 16px;
+  }
 `;
 
 const Bar = styled.div`
@@ -269,18 +290,30 @@ const Bar = styled.div`
   width: 100%;
   background: #2b2b2b;
   margin-bottom: 30px;
+
+  @media (max-width: 540px) {
+    margin-bottom: 22px;
+  }
 `;
 
 const Form = styled.form``;
 
 const Title = styled.div`
   margin-bottom: 30px;
+
+  @media (max-width: 540px) {
+    margin-bottom: 22px;
+  }
 `;
 
 const Label = styled.h4`
   font-size: 20px;
   font-weight: 500;
   margin-bottom: 10px;
+
+  @media (max-width: 540px) {
+    font-size: 16px;
+  }
 `;
 
 const Input = styled.input`
@@ -291,6 +324,10 @@ const Input = styled.input`
   border-radius: 8px;
   font-size: 20px;
   font-weight: 500;
+
+  @media (max-width: 540px) {
+    font-size: 16px;
+  }
 `;
 
 const PickArea = styled.div`
@@ -298,10 +335,20 @@ const PickArea = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
+
+  @media (max-width: 540px) {
+    flex-direction: column;
+    gap: 22px;
+    margin-bottom: 22px;
+  }
 `;
 
 const Amount = styled(Title)`
   margin-bottom: 0;
+
+  @media (max-width: 540px) {
+    width: 100%;
+  }
 `;
 
 const DateTime = styled(Amount)``;
@@ -311,6 +358,12 @@ const SelectArea = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
+
+  @media (max-width: 540px) {
+    flex-direction: column;
+    gap: 22px;
+    margin-bottom: 22px;
+  }
 `;
 
 const Type = styled.div`
@@ -336,6 +389,10 @@ const CurrentOption = styled.h5`
   font-weight: 500;
   color: #848484;
   text-transform: capitalize;
+
+  @media (max-width: 540px) {
+    font-size: 16px;
+  }
 `;
 
 const DropDown = styled.img``;
@@ -361,6 +418,10 @@ const Value = styled.h5`
   color: #f9f9f9;
   margin-bottom: 8px;
   text-transform: capitalize;
+
+  @media (max-width: 540px) {
+    font-size: 16px;
+  }
 `;
 
 const Border = styled.div`
@@ -387,6 +448,10 @@ const Submit = styled.button`
   border-radius: 8px;
   font-size: 20px;
   font-weight: 500;
+
+  @media (max-width: 540px) {
+    font-size: 16px;
+  }
 `;
 
 export default AddTransactionForm;

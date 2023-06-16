@@ -20,6 +20,10 @@ const Background = styled.div`
   background: rgba(0, 0, 0, 0.9);
   backdrop-filter: blur(5px);
   z-index: 4;
+
+  @media (max-width: 540px) {
+    padding: 42px;
+  }
 `;
 
 export default AddTransaction;
