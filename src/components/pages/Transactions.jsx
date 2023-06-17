@@ -11,6 +11,7 @@ import Balance from "../objects/Balance";
 import Dialogue from "../objects/Dialogue";
 import Transaction from "../objects/Transaction";
 import { TabTitle } from "../utilities/titleFunction";
+import AddButton from "../buttons/AddButton";
 
 function Transactions() {
   TabTitle("Transactions - Budget Ease");
@@ -140,6 +141,10 @@ const Right = styled.div`
   display: flex;
   align-items: center;
   gap: 20px;
+
+  @media (max-width: 540px) {
+    width: 100%;
+  }
 `;
 
 const SortArea = styled.div`

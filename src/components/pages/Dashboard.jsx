@@ -32,7 +32,7 @@ function Dashboard() {
     <Container>
       <Top>
         <Heading>Dashboard</Heading>
-        <AddButtonCircle add="transaction" display={true}/>
+        <AddButtonCircle add="transaction" display={true} />
       </Top>
       <TopGrid>
         <GridElement
@@ -57,7 +57,7 @@ function Dashboard() {
           </Label>
         </GridElement>
         <GridElement
-          subheading={countArray(transactions)}
+          subheading={countArray(expenses)}
           type="small"
           color="#c33939"
           animationDelay={2 / 7 + 0.2}

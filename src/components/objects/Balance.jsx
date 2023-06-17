@@ -16,7 +16,13 @@ function Balance({ transactions, income, expenses, display, animationDelay }) {
   }, [income, expenses]);
 
   return (
-    <GridElement subheading="Balance" type="large" link="transactions" display={display} animationDelay={animationDelay}>
+    <GridElement
+      subheading="Balance"
+      type="large"
+      link="transactions"
+      display={display}
+      animationDelay={animationDelay}
+    >
       {transactions.length === 0 ? (
         <Dialogue type="transaction" />
       ) : (
@@ -35,6 +41,7 @@ function Balance({ transactions, income, expenses, display, animationDelay }) {
 }
 
 const Box = styled.div`
+  height: calc(100% - 40px - 20px);
   width: 100%;
   padding: 40px 0;
   display: flex;
@@ -43,6 +50,10 @@ const Box = styled.div`
   background: #2b2b2b;
   border: 2px solid #4b4b4b;
   border-radius: 8px;
+
+  @media (max-width: 768px) {
+    padding: 28px 0;
+  }
 `;
 
 const Flex = styled.div``;
@@ -63,7 +74,7 @@ const TotalExpense = styled(TotalIncome)`
 `;
 
 const Equal = styled.h5`
-  font-size: 32px;
+  font-size: 28px;
   font-weight: 600;
 `;
 
