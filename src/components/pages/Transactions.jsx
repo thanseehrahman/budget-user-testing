@@ -11,7 +11,6 @@ import Balance from "../objects/Balance";
 import Dialogue from "../objects/Dialogue";
 import Transaction from "../objects/Transaction";
 import { TabTitle } from "../utilities/titleFunction";
-import AddButton from "../buttons/AddButton";
 
 function Transactions() {
   TabTitle("Transactions - Budget Ease");
